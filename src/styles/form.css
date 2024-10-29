@@ -1,20 +1,4 @@
-form {
-    padding: 20px;
-    border: 1px solid #6b6b6b;
-    border-radius: 10px;
-    background-color: #d4d4d4;
-}
-
-label {
-    display: block;
-    margin-bottom: 17px;
-    font-weight: bold;
-    color: rgb(0, 5, 36);
-}
-
-input,
-select,
-option {
+input {
     margin-top: 5px;
     width: 100%;
     padding: 10px;
