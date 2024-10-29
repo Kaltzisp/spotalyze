@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ZXing example</title>
+    <script type="text/javascript" src="https://unpkg.com/@zxing/library@0.20.0"></script>
+</head>
+
+<body>
+  <h1>Scan EAN13, CODE128, RSS-14, RSS_EXPANDED and QRCode using ZXing (v0.20.0)</h1>
+  <ul>
+    <li><a href="wasm.html">Try with ZXing WASM wrapper</a></li>
+    <li><a href="zxing-continuous.html">Try continuous scanning with hidden video element</a></li>
+    <li><a href="quagga.html">Try with Quagga</a></li>
+  </ul>
+  
+  <label>Result:</label>
+  <p id="result"></p>
+  Log:
+  <p id="log" style="white-space: pre"></p>
+
+  Track supported capabilities:
+  <ul id="constraintList">
+  </ul>
+
+  <button onclick="toggleTorch()">Torch</button>
+  <button onclick="toggleZoom()">Zoom</button>
+  <div>
+    <video id="video" width="100%" style="border: 1px solid gray"></video>
+  </div>
+
+  <script type="text/javascript">
+    window.addEventListener('load', function () {
+      const hints = new Map();
+      hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.CODE_128, ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.QR_CODE, ZXing.BarcodeFormat.RSS_EXPANDED, ZXing.BarcodeFormat.RSS_14])
+      const codeReader = new ZXing.BrowserMultiFormatReader(hints)
+
+      // MediaTrackConstraints
+      let videoConstraints = {
+        facingMode: 'environment',
+        width: {
+          min: 1024
+        },
+      }
+
+      document.getElementById('log').textContent += 'constraints: ' + JSON.stringify(videoConstraints) + '\r\n'
+
+      setTimeout(function() {
+        // Supported constraints
+        let constraintList = document.getElementById("constraintList");
+        let supportedCapabilities = document.getElementById('video').srcObject.getVideoTracks()[0].getCapabilities();
+        for (let capability in supportedCapabilities) {
+          if (supportedCapabilities.hasOwnProperty(capability)) {
+            let elem = document.createElement("li");
+      
+            elem.innerHTML = "<code>" + capability + "</code>";
+            constraintList.appendChild(elem);
+          }
+        }
+      }, 5000);
+
+      codeReader.decodeOnceFromConstraints({
+        video: videoConstraints
+      },'video')
+      //codeReader.decodeFromInputVideoDevice(undefined, 'video')
+        .then((result) => {
+          document.getElementById('result').textContent = result.text
+        })
+        .catch((err) => {
+          document.getElementById('result').textContent = err
+        })
+    })
+
+    var torchEnabled = false;
+    var toggleTorch = function() {
+      torchEnabled = !torchEnabled
+
+      document.getElementById('video').srcObject.getVideoTracks()[0].applyConstraints({advanced: [{ torch: torchEnabled }]})
+              .then(() => document.getElementById('log').textContent += 'torch toggled\r\n' )
+              .catch((err) => document.getElementById('log').textContent += 'error with torch' + err + '\r\n')
+
+    }
+
+    var zoomActivated = false
+    var toggleZoom = function() {
+      zoomActivated = !zoomActivated
+
+      const zoomLevel = zoomActivated ? 4 : 1
+      document.getElementById('video').srcObject.getVideoTracks()[0].applyConstraints({advanced: [{ zoom: zoomLevel }]})
+              .then(() => document.getElementById('log').textContent += 'zoom activated\r\n' )
+              .catch((err) => document.getElementById('log').textContent += 'error turning on zoom' + err + '\r\n')
+    }
+  </script>
+</body>
+</html>

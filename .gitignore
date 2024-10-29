@@ -1,0 +1,9 @@
+# Environment.
+.env
+
+# Dev files.
+.vscode
+
+# Build files.
+build
+node_modules

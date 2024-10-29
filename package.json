@@ -1,0 +1,33 @@
+{
+    "name": "healthpoint",
+    "version": "0.2.0",
+    "dependencies": {
+        "@zxing/browser": "latest",
+        "chartjs-adapter-date-fns": "latest",
+        "chart.js": "latest",
+        "react": "latest",
+        "react-dom": "latest",
+        "react-router-dom": "latest",
+        "react-scripts": "latest",
+        "typescript": "latest"
+    },
+    "devDependencies": {
+        "@types/chart.js": "latest",
+        "@types/jest": "latest",
+        "@types/react": "latest",
+        "@types/react-dom": "latest"
+    },
+    "scripts": {
+        "build": "react-scripts build",
+        "start": "react-scripts start",
+        "test": "react-scripts test"
+    },
+    "browserslist": {
+        "production": [
+            "defaults"
+        ],
+        "development": [
+            "defaults"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        // Compilation options.
+        "module": "ESNext",
+        "target": "ESNext",
+        "moduleResolution": "Node",
+        // Type-checking options.
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        // Build options.
+        "baseUrl": "./",
+        "rootDir": "./",
+        "outDir": "./build",
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react"
+    },
+    "include": ["src", "tests"],
+    "exclude": ["node_modules"]
+}
