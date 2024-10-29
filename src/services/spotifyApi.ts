@@ -1,6 +1,6 @@
-import { getTrackInfo } from "./geniusApi";
+import { type Track, getTrackInfo } from "./geniusApi";
 
-interface Track {
+interface SpotifyTrack {
     track: {
         name: string;
         artists: {
@@ -11,7 +11,9 @@ interface Track {
 
 interface PlaylistResponse {
     tracks: {
-        items: Track[];
+        items: SpotifyTrack[];
+        offset: number;
+        total: number;
     };
 }
 
@@ -30,15 +32,32 @@ export async function getSpotifyToken(): Promise<string> {
     return data.access_token;
 }
 
-export async function getPlaylist(url: string): Promise<void> {
+async function getFullPlaylist(url: string): Promise<Track[]> {
     const token = await getSpotifyToken();
-    const response = await fetch(`https://api.spotify.com/v1/playlists/${url.split("/").pop()}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
+    const playlistId = url.split("/").pop();
+    let allTracksConsumed = false;
+    let currentOffset = 0;
+    const trackPromises: Promise<Track>[] = [];
+    while (!allTracksConsumed) {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}?offset=${currentOffset}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        const playlistInfo = await response.json() as PlaylistResponse;
+        playlistInfo.tracks.items.forEach(item => trackPromises.push(getTrackInfo(item.track.name, item.track.artists[0].name)));
+        if (playlistInfo.tracks.offset + 100 >= playlistInfo.tracks.total) {
+            allTracksConsumed = true;
+        } else {
+            currentOffset += 100;
         }
-    });
-    const playlistInfo = await response.json() as PlaylistResponse;
-    const tracks = await Promise.all(playlistInfo.tracks.items.map(async item => getTrackInfo(item.track.name, item.track.artists[0].name)));
+    }
+    const tracks = await Promise.all(trackPromises);
+    return tracks;
+}
+
+export async function getPlaylist(url: string): Promise<void> {
+    const tracks = await getFullPlaylist(url);
     tracks.sort((a, b) => new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime());
     tracks.forEach((track) => {
         console.log(`${track.query} : ${track.name} : ${track.artists} : ${track.releaseDate}`);

@@ -15,7 +15,7 @@ interface TrackResponse {
     };
 }
 
-interface Track {
+export interface Track {
     query: string;
     name: string;
     artists: string;
