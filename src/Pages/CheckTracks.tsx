@@ -5,10 +5,10 @@ function CheckTracks(): React.JSX.Element {
     const [playlistUrl, setPlaylistUrl] = useState("");
     return (
         <div>
-            <input name="playlistUrl" onChange={(e): void => setPlaylistUrl(e.target.value)} placeholder="Enter playlist url here" type="text" value={playlistUrl} />
+            <input name="playlistUrl" onChange={(e): void => setPlaylistUrl(e.target.value)} placeholder="Spotify Playlist URL" type="text" value={playlistUrl} />
             <button onClick={(): void => {
                 getPlaylist(playlistUrl).catch(e => console.error(e));
-            }} type="button">{"Get playlist info"}
+            }} type="button">{"Check release dates"}
             </button>
         </div>
     );
