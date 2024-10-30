@@ -5,5 +5,8 @@
 .vscode
 
 # Build files.
-build
 node_modules
+build
+
+#Data files.
+data
