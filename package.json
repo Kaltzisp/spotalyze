@@ -2,27 +2,9 @@
     "name": "spotalyze",
     "version": "0.1.0",
     "dependencies": {
-        "react": "latest",
-        "react-dom": "latest",
-        "react-router-dom": "latest",
-        "react-scripts": "latest",
         "typescript": "latest"
     },
     "devDependencies": {
-        "@types/react": "latest",
-        "@types/react-dom": "latest"
-    },
-    "scripts": {
-        "build": "react-scripts build",
-        "start": "react-scripts start",
-        "test": "react-scripts test"
-    },
-    "browserslist": {
-        "production": [
-            "defaults"
-        ],
-        "development": [
-            "defaults"
-        ]
+        "@types/node": "latest"
     }
 }

@@ -15,7 +15,6 @@
         "outDir": "./build",
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
-        "jsx": "react"
     },
     "include": ["src", "tests"],
     "exclude": ["node_modules"]

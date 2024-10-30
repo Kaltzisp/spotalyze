@@ -46,19 +46,6 @@
         "sort-imports": ["error", { "allowSeparatedGroups": true }],
         "sort-keys": "off",
 
-        // React rules.
-        "react/destructuring-assignment": ["error", "never"],
-        "react/jsx-closing-bracket-location": "off",
-        "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "always", "propElementValues": "always" }],
-        "react/jsx-filename-extension": ["error", { "extensions": [".tsx", ".ts"] }],
-        "react/jsx-first-prop-new-line": "off",
-        "react/jsx-indent": "off",
-        "react/jsx-max-depth": ["error", { "max": 4 }],
-        "react/jsx-max-props-per-line": "off",
-        "react/jsx-newline": "off",
-        "react/jsx-no-bind": "off",
-        "react/jsx-one-expression-per-line": "off",
-
         // TypeScript rules.
         "@typescript-eslint/class-methods-use-this": "off",
         "@typescript-eslint/consistent-indexed-object-style": "off",
