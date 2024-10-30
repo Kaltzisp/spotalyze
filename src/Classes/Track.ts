@@ -1,6 +1,6 @@
-import type { SpotifyTrack } from "../APIs/spotify";
-import { getReleaseDateFromGenius } from "../APIs/genius";
-import { getReleaseDateFromIsrc } from "../APIs/musicbrainz";
+import type { SpotifyTrack } from "../APIs/spotify.js";
+import { getReleaseDateFromGenius } from "../APIs/genius.js";
+import { getReleaseDateFromIsrc } from "../APIs/musicbrainz.js";
 
 export class Track {
 

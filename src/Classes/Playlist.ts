@@ -15,19 +15,19 @@ export class Playlist {
         this.tracks = await getSpotifyPlaylist(this.url);
     }
 
-    public async printReleaseDates(): Promise<void> {
+    public async printWithReleaseDates(): Promise<void> {
         this.tracks = await Promise.all(this.tracks.map(async track => track.getEarliestReleaseDate()));
         this.tracks.sort((a, b) => a.releaseDate.getTime() - b.releaseDate.getTime());
         const output = this.tracks.map(track => `${track.name} : ${track.artists} : ${track.releaseDate.toISOString().split("T").shift()}`).join("\n");
         console.log(output);
     }
 
-    public toCSV(): void {
+    public printAsCSV(): void {
         const output = this.tracks.map(track => `${track.name}\t${track.artists}`).join("\n");
         console.log(output);
     }
 
-    public saveAsTrackIds(fileName: string): void {
+    public saveTrackIds(fileName: string): void {
         const output = JSON.stringify(this.tracks.map(track => track.id));
         writeFileSync(`./data/${fileName}.json`, output, "utf8")
     }

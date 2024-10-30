@@ -1,4 +1,4 @@
-import { Track } from "src/Classes/Track";
+import { Track } from "../Classes/Track.js";
 
 export interface SpotifyTrack {
     id: string;

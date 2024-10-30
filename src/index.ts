@@ -1,8 +1,10 @@
+import { Playlist } from "./Classes/Playlist.js";
 import { config } from "dotenv";
-import { getPlaylistWithDates } from "./playlist.js";
 
 // Config.
 config();
 
 // Running script.
-await getPlaylistWithDates("https://open.spotify.com/playlist/0RsjpSDr3scjYBPYG71K1f?si=16a6ff5e74124cd0");
+const playlist = new Playlist("https://open.spotify.com/playlist/0Z2CnFqm44t40fcVEi1jjf?si=387b6a716feb4520");
+await playlist.getTracks();
+playlist.saveTrackIds("test");
