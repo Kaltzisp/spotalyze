@@ -6,11 +6,13 @@
         "@types/node": "latest",
         "@typescript-eslint/eslint-plugin": "7.4",
         "@typescript-eslint/parser": "7.4",
+        "@types/express": "latest",
         "eslint": "8.57",
         "typescript": "latest"
     },
     "dependencies": {
         "dotenv": "latest",
+        "express": "latest",
         "typescript": "latest"
     }
 }
