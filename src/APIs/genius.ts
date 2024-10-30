@@ -17,8 +17,7 @@ interface TrackInfo {
 function sanitized(name: string): string {
     return name.
         toLowerCase().
-        replace(/\(.*?\)/gu, "").
-        split(/[&;-]/gu).shift()!.
+        split(/[&;[(-,]/gu).shift()!.
         replace(/[^a-zA-Z0-9]/gu, "");
 }
 
