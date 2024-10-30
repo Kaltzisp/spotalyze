@@ -12,7 +12,7 @@
         // Build options.
         "baseUrl": "./",
         "rootDir": "./",
-        "outDir": "./build",
+        "outDir": "./app",
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
     },

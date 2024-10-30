@@ -6,7 +6,7 @@
 
 # Build files.
 node_modules
-build
+app
 
 #Data files.
 data

@@ -8,6 +8,10 @@ const PORT = 3000;
 
 const redirectUri = `http://localhost:${PORT}/success`;
 
+app.get("/", (request, response) => {
+    response.send("Abcdefg");
+});
+
 app.get("/create-playlist", (request, response) => {
     response.redirect(`https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&scope=playlist-modify-public&redirect_uri=${redirectUri}&response_type=code`);
 });
