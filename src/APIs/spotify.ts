@@ -1,21 +1,25 @@
-import { getTrackInfo } from "./geniusApi";
-
 interface SpotifyTrack {
-    track: {
+    album: {
+        release_date: string;
+    }
+    artists: {
         name: string;
-        artists: {
-            name: string;
-        }[];
+    }[];
+    name: string;
+    external_ids: {
+        isrc: string;
     };
 }
 
 interface PlaylistResponse {
-    items: SpotifyTrack[];
+    items: {
+        track: SpotifyTrack;
+    }[];
     offset: number;
     total: number;
 }
 
-export async function getSpotifyToken(): Promise<string> {
+async function getSpotifyToken(): Promise<string> {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
     const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -30,9 +34,9 @@ export async function getSpotifyToken(): Promise<string> {
     return data.access_token;
 }
 
-async function getFullPlaylist(url: string): Promise<SpotifyTrack[]> {
+export async function getSpotifyPlaylist(playlistUrl: string): Promise<SpotifyTrack[]> {
     const token = await getSpotifyToken();
-    const playlistId = url.split("/").pop()?.split("?").shift();
+    const playlistId = playlistUrl.split("/").pop()?.split("?").shift();
     let allTracksConsumed = false;
     let currentOffset = 0;
     const tracks: SpotifyTrack[] = [];
@@ -43,7 +47,7 @@ async function getFullPlaylist(url: string): Promise<SpotifyTrack[]> {
             }
         });
         const playlistInfo = await response.json() as PlaylistResponse;
-        playlistInfo.items.forEach(item => tracks.push(item));
+        playlistInfo.items.forEach(item => tracks.push(item.track));
         if (playlistInfo.offset + 100 >= playlistInfo.total) {
             allTracksConsumed = true;
         } else {
@@ -51,20 +55,4 @@ async function getFullPlaylist(url: string): Promise<SpotifyTrack[]> {
         }
     }
     return tracks;
-}
-
-export async function getReleaseDates(url: string): Promise<void> {
-    const spotifyTracks = await getFullPlaylist(url);
-    const trackPromises = spotifyTracks.map(async track => getTrackInfo(track.track.name, track.track.artists[0].name));
-    const tracks = await Promise.all(trackPromises);
-    tracks.sort((a, b) => new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime());
-    tracks.forEach((track) => {
-        console.log(`${track.query} : ${track.name} : ${track.artists} : ${track.releaseDate}`);
-    });
-}
-
-export async function playlistToCSV(url: string): Promise<void> {
-    const tracks = await getFullPlaylist(url);
-    const csvData = tracks.map(track => `${track.track.name}\t${track.track.artists.map(artist => artist.name).join("; ")}`).join("\n");
-    console.log(csvData);
 }
