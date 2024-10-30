@@ -22,6 +22,13 @@ interface PlaylistResponse {
     total: number;
 }
 
+interface CreatePlaylistResponse {
+    id: string;
+    external_urls: {
+        spotify: string;
+    };
+}
+
 async function getSpotifyToken(): Promise<string> {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -58,4 +65,29 @@ export async function getSpotifyPlaylist(playlistUrl: string): Promise<Track[]> 
         }
     }
     return spotifyTracks.map(spotifyTrack => new Track(spotifyTrack));
+}
+
+export async function createPlaylist(playlistName: string, trackURIs: string[]): Promise<string> {
+    const token = process.env.SPOTIFY_ACCESS_TOKEN;
+    const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: playlistName,
+            description: "None",
+            public: true
+        })
+    });
+    const data = await response.json() as CreatePlaylistResponse;
+    while (trackURIs.length > 0) {
+        await fetch(`https://api.spotify.com/v1/playlists/${data.id}/tracks`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ uris: trackURIs.splice(0, 100) })
+        });
+    }
+    return data.external_urls.spotify
 }
