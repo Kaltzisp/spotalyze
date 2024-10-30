@@ -23,7 +23,7 @@ export interface Track {
 }
 
 export async function getTrackInfo(title: string, artist: string): Promise<Track> {
-    const token = process.env.REACT_APP_GENIUS_ACCESS_TOKEN;
+    const token = process.env.GENIUS_ACCESS_TOKEN;
     const response = await fetch(`https://api.genius.com/search?access_token=${token}&q=${title} ${artist}`);
     const data = await response.json() as TrackResponse;
     const track = {

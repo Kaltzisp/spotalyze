@@ -1,7 +1,6 @@
 {
     "extends": [
         "eslint:all",
-        "plugin:react/all",
         "plugin:@typescript-eslint/all"
     ],
     "parser": "@typescript-eslint/parser",
