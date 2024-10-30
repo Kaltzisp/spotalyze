@@ -35,13 +35,12 @@ export async function getPlaylistWithDates(playlistUrl: string): Promise<void> {
         return track;
     }));
     tracks.sort((a, b) => a.releaseDate.getTime() - b.releaseDate.getTime());
-    tracks.forEach((track) => {
-        console.log(`${track.name} : ${track.artists} : ${track.releaseDate.toISOString().split("T").shift()}`);
-    });
+    const output = tracks.map(track => `${track.name} : ${track.artists} : ${track.releaseDate.toISOString().split("T").shift()}`).join("\n");
+    console.log(output);
 }
 
-// export async function playlistToCSV(url: string): Promise<void> {
-//     const tracks = await getFullPlaylist(url);
-//     const csvData = tracks.map(track => `${track.track.name}\t${track.track.artists.map(artist => artist.name).join("; ")}`).join("\n");
-//     console.log(csvData);
-// }
+export async function playlistToCSV(playlistUrl: string): Promise<void> {
+    const tracks = await getSpotifyPlaylist(playlistUrl);
+    const output = tracks.map(track => `${track.name}\t${track.artists.map(artist => artist.name).join("; ")}`).join("\n");
+    console.log(output);
+}
