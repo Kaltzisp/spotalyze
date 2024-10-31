@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <link rel="icon" href="favicon.ico" />
-    <link rel="stylesheet" href="styles/form.css">
     <link rel="stylesheet" href="styles/global.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="Web site created using create-react-app" />
@@ -14,12 +13,20 @@
 <body>
     <div id="root">
         <div>
-            <a href="/login" type="button" >Authenticate</a>
+            <button id="authenticate" type="button">Authenticate</button>
             <input id="textInput" type="text" placeholder="Spotify Playlist URL">
-            <a href="/login" type="button">Check release dates</a>
-            <a href="/login" type="button">Playlist to CSV</a>
+            <button id="getReleaseDates" type="button">Check release dates</button>
+            <button id="playlistToCSV" type="button">Playlist to CSV</button>
         </div>
     </div>
+    <script type="module">
+        const playlistId = () => document.getElementById("textInput").value.split("/").pop().split("?").shift();
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("authenticate").addEventListener("click", (e) => window.location.href = `/login`);
+            document.getElementById("getReleaseDates").addEventListener("click", (e) => window.location.href = `/getReleaseDates/?id=${playlistId()}`);
+            document.getElementById("playlistToCSV").addEventListener("click", (e) => window.location.href = `/playlistToCSV/?id=${playlistId()}`);
+        });
+    </script>
 </body>
 
 </html>
