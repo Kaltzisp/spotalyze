@@ -50,11 +50,13 @@ app.get("/playlistToCSV", async (request, response) => {
     response.redirect("/");
 });
 
-// app.get("/create-playlist", async (request, response) => {
-//     const playlist = new Playlist("https://open.spotify.com/playlist/31bIESFeWDZSnvFU7yVoMI?si=c8a64e492f7b4029&pt=9f4c3f288531acc56753565c38b569fa");
-//     await playlist.getTracks();
-//     await playlist.createShuffled("Randomized", process.env.SPOTIFY_USER_TOKEN!);
-// });
+app.get("/createShuffled", async (request, response) => {
+    const { id } = request.query;
+    const playlist = new Playlist(id as string);
+    await playlist.getTracks().catch((e: unknown) => console.error(e));
+    await playlist.createShuffled("Randomized").catch((e: unknown) => console.error(e));
+    response.redirect("/");
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running at ${url}`);

@@ -79,11 +79,11 @@ export async function getSpotifyPlaylist(playlistId: string): Promise<Track[]> {
     return spotifyTracks.map(spotifyTrack => new Track(spotifyTrack));
 }
 
-export async function createPlaylist(playlistName: string, trackURIs: string[], token: string): Promise<string> {
+export async function createPlaylist(playlistName: string, trackURIs: string[]): Promise<string> {
     const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${process.env.SPOTIFY_USER_TOKEN}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -96,7 +96,7 @@ export async function createPlaylist(playlistName: string, trackURIs: string[], 
     while (trackURIs.length > 0) {
         await fetch(`https://api.spotify.com/v1/playlists/${data.id}/tracks`, {
             method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${process.env.SPOTIFY_USER_TOKEN}` },
             body: JSON.stringify({ uris: trackURIs.splice(0, 100) })
         });
     }

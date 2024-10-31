@@ -32,13 +32,13 @@ export class Playlist {
         writeFileSync(`./data/${fileName}.json`, output, "utf8")
     }
 
-    public async createShuffled(playlistName: string, token: string): Promise<void> {
+    public async createShuffled(playlistName: string): Promise<void> {
         const trackURIs = this.tracks.map(track => `spotify:track:${track.id}`);
         for (let i = trackURIs.length - 1; i >= 0; i -= 1) {
             const j = Math.floor(Math.random() * (i + 1));
             [trackURIs[i], trackURIs[j]] = [trackURIs[j], trackURIs[i]];
         }
-        const playlistUrl = await createPlaylist(playlistName, trackURIs, token);
+        const playlistUrl = await createPlaylist(playlistName, trackURIs);
         console.log(`New playlist created at: ${playlistUrl}`);
     }
 

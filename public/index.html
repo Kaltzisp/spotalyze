@@ -17,6 +17,7 @@
             <input id="textInput" type="text" placeholder="Spotify Playlist URL">
             <button id="getReleaseDates" type="button">Check release dates</button>
             <button id="playlistToCSV" type="button">Playlist to CSV</button>
+            <button id="createShuffled" type="button">Shuffle</button>
         </div>
     </div>
     <script type="module">
@@ -25,6 +26,7 @@
             document.getElementById("login").addEventListener("click", (e) => window.location.href = `/login`);
             document.getElementById("getReleaseDates").addEventListener("click", (e) => window.location.href = `/getReleaseDates/?id=${playlistId()}`);
             document.getElementById("playlistToCSV").addEventListener("click", (e) => window.location.href = `/playlistToCSV/?id=${playlistId()}`);
+            document.getElementById("createShuffled").addEventListener("click", (e) => window.location.href = `/createShuffled/?id=${playlistId()}`);
         });
     </script>
 </body>
