@@ -1,22 +1,6 @@
-form {
-    padding: 20px;
-    border: 1px solid #6b6b6b;
-    border-radius: 10px;
-    background-color: #d4d4d4;
-}
-
-label {
-    display: block;
-    margin-bottom: 17px;
-    font-weight: bold;
-    color: rgb(0, 5, 36);
-}
-
-input,
-select,
-option {
-    margin-top: 5px;
-    width: 100%;
+input {
+    margin: 5px;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -26,8 +10,8 @@ option {
     background-color: #ebebeb;
 }
 
-button {
-    margin-top: 15px;
+a {
+    margin-top: 105px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -37,6 +21,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+a:hover {
     background-color: #225025;
 }

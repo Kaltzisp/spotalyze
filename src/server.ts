@@ -1,38 +1,42 @@
-import { Playlist } from "./Classes/Playlist.js";
+// import { Playlist } from "./Classes/Playlist.js";
 import { config } from "dotenv";
 import express from "express";
+import { fileURLToPath } from 'url';
+import { getUserToken } from "./APIs/spotify.js";
+import { join } from "path";
 
+// Loading env variables.
 config();
+
+// App config.
 const app = express();
 const PORT = 3000;
+const url = `http://localhost:${PORT}`;
 
-const redirectUri = `http://localhost:${PORT}/success`;
+app.use(express.static(join(fileURLToPath(import.meta.url), "../../public")));
 
-app.get("/", (request, response) => {
-    response.send("Abcdefg");
+app.get("/login", (request, response) => {
+    const queryParams = [
+        `client_id=${process.env.SPOTIFY_CLIENT_ID}`,
+        `scope=playlist-modify-public`,
+        `redirect_uri=${url}/auth-landing`,
+        `response_type=code`
+    ].join("&");
+    response.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-app.get("/create-playlist", (request, response) => {
-    response.redirect(`https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&scope=playlist-modify-public&redirect_uri=${redirectUri}&response_type=code`);
+app.get("/auth-landing", async (request, response) => {
+    process.env.SPOTIFY_USER_TOKEN = await getUserToken(request.query.code as string, `${url}/auth-landing`);
+    response.redirect("/");
 });
 
-app.get("/success", async (request, response) => {
-    const authCode = request.query.code;
-    const res = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`
-        },
-        body: `code=${authCode}&redirect_uri=${redirectUri}&grant_type=authorization_code`
-    });
-    const data = await res.json() as { access_token: string };
-    response.send(`Spotify access token: ${data.access_token}`);
-    const playlist = new Playlist("https://open.spotify.com/playlist/52DDYLZ2am85rMRlYfPqdY?si=1a11b591d14a471f");
-    await playlist.getTracks();
-    await playlist.createShuffled("Randomized");
-});
+// app.get("/create-playlist", async (request, response) => {
+//     const playlist = new Playlist("https://open.spotify.com/playlist/31bIESFeWDZSnvFU7yVoMI?si=c8a64e492f7b4029&pt=9f4c3f288531acc56753565c38b569fa");
+//     await playlist.getTracks();
+//     await playlist.createShuffled("Randomized", data.access_token);
+// });
+
 
 app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}/create-playlist`);
+    console.log(`Server is running at ${url}`);
 });
