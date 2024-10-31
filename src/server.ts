@@ -1,4 +1,4 @@
-// import { Playlist } from "./Classes/Playlist.js";
+import { Playlist } from "./Classes/Playlist.js";
 import { config } from "dotenv";
 import express from "express";
 import { fileURLToPath } from 'url';
@@ -16,13 +16,17 @@ const url = `http://localhost:${PORT}`;
 app.use(express.static(join(fileURLToPath(import.meta.url), "../../public")));
 
 app.get("/login", (request, response) => {
-    const queryParams = [
-        `client_id=${process.env.SPOTIFY_CLIENT_ID}`,
-        `scope=playlist-modify-public`,
-        `redirect_uri=${url}/auth-landing`,
-        `response_type=code`
-    ].join("&");
-    response.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
+    if (!process.env.SPOTIFY_USER_TOKEN) {
+        const queryParams = [
+            `client_id=${process.env.SPOTIFY_CLIENT_ID}`,
+            `scope=playlist-modify-public`,
+            `redirect_uri=${url}/auth-landing`,
+            `response_type=code`
+        ].join("&");
+        response.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
+    } else {
+        response.redirect("/");
+    }
 });
 
 app.get("/auth-landing", async (request, response) => {
@@ -30,12 +34,27 @@ app.get("/auth-landing", async (request, response) => {
     response.redirect("/");
 });
 
+app.get("/getReleaseDates", async (request, response) => {
+    const { id } = request.query;
+    const playlist = new Playlist(id as string);
+    await playlist.getTracks().catch((e: unknown) => console.error(e));
+    await playlist.printWithReleaseDates().catch((e: unknown) => console.error(e));
+    response.redirect("/");
+});
+
+app.get("/playlistToCSV", async (request, response) => {
+    const { id } = request.query;
+    const playlist = new Playlist(id as string);
+    await playlist.getTracks().catch((e: unknown) => console.error(e));
+    playlist.printAsCSV();
+    response.redirect("/");
+});
+
 // app.get("/create-playlist", async (request, response) => {
 //     const playlist = new Playlist("https://open.spotify.com/playlist/31bIESFeWDZSnvFU7yVoMI?si=c8a64e492f7b4029&pt=9f4c3f288531acc56753565c38b569fa");
 //     await playlist.getTracks();
-//     await playlist.createShuffled("Randomized", data.access_token);
+//     await playlist.createShuffled("Randomized", process.env.SPOTIFY_USER_TOKEN!);
 // });
-
 
 app.listen(PORT, () => {
     console.log(`Server is running at ${url}`);
