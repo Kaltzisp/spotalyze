@@ -4,15 +4,15 @@ import { writeFileSync } from "fs";
 
 export class Playlist {
 
-    private readonly url: string;
+    private readonly id: string;
     private tracks: Track[] = [];
 
-    public constructor(playlistUrl: string) {
-        this.url = playlistUrl;
+    public constructor(playlistId: string) {
+        this.id = playlistId;
     }
 
     public async getTracks(): Promise<void> {
-        this.tracks = await getSpotifyPlaylist(this.url);
+        this.tracks = await getSpotifyPlaylist(this.id);
     }
 
     public async printWithReleaseDates(): Promise<void> {

@@ -57,9 +57,8 @@ async function getApiToken(): Promise<string> {
     return data.access_token;
 }
 
-export async function getSpotifyPlaylist(playlistUrl: string): Promise<Track[]> {
+export async function getSpotifyPlaylist(playlistId: string): Promise<Track[]> {
     const token = await getApiToken();
-    const playlistId = playlistUrl.split("/").pop()?.split("?").shift();
     let allTracksConsumed = false;
     let currentOffset = 0;
     const spotifyTracks: SpotifyTrack[] = [];
