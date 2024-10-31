@@ -29,7 +29,20 @@ interface CreatePlaylistResponse {
     };
 }
 
-async function getSpotifyToken(): Promise<string> {
+export async function getUserToken(authCode: string, redirectUri: string): Promise<string> {
+    const response = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": `Basic ${btoa(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`)}`
+        },
+        body: `code=${authCode}&redirect_uri=${redirectUri}&grant_type=authorization_code`
+    });
+    const data = await response.json() as { access_token: string };
+    return data.access_token;
+}
+
+async function getApiToken(): Promise<string> {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
     const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -45,7 +58,7 @@ async function getSpotifyToken(): Promise<string> {
 }
 
 export async function getSpotifyPlaylist(playlistUrl: string): Promise<Track[]> {
-    const token = await getSpotifyToken();
+    const token = await getApiToken();
     const playlistId = playlistUrl.split("/").pop()?.split("?").shift();
     let allTracksConsumed = false;
     let currentOffset = 0;
@@ -67,8 +80,7 @@ export async function getSpotifyPlaylist(playlistUrl: string): Promise<Track[]> 
     return spotifyTracks.map(spotifyTrack => new Track(spotifyTrack));
 }
 
-export async function createPlaylist(playlistName: string, trackURIs: string[]): Promise<string> {
-    const token = process.env.SPOTIFY_ACCESS_TOKEN;
+export async function createPlaylist(playlistName: string, trackURIs: string[], token: string): Promise<string> {
     const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
         method: "POST",
         headers: {
