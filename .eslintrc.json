@@ -1,9 +1,121 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript"
-  ],
-  "rules": {
-    "indent": ["error", 4, { "SwitchCase": 1 }]
-  }
+    "extends": [
+        "eslint:all",
+        "plugin:react/all",
+        "plugin:@typescript-eslint/all",
+        "plugin:@stylistic/all-extends"
+    ],
+    "plugins": [
+        "@stylistic"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json",
+        "ecmaFeatures": { "jsx": true }
+    },
+    "rules": {
+
+        // JavaScript rules.
+        // "array-element-newline": ["error", "consistent"],
+        // "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
+        // "capitalized-comments": "off",
+        // "dot-location": "error",
+        // "eol-last": "error",
+        // "func-style": ["error", "declaration"],
+        // "function-call-argument-newline": ["error", "consistent"],
+        // "guard-for-in": "off",
+        // "id-length": "off",
+        // "indent": ["error", 4, { "SwitchCase": 1 }],
+        // "max-depth": ["error", 6],
+        // "linebreak-style": "off",
+        // "max-classes-per-file": ["error", 2],
+        // "max-len": ["error", 250],
+        "max-lines-per-function": ["error", 100],
+        // "max-statements": "off",
+        // "multiline-comment-style": "off",
+        // "newline-per-chained-call": "off",
+        // "no-await-in-loop": "off",
+        // "no-console": "off",
+        // "no-negated-condition": "off",
+        // "no-underscore-dangle": "off",
+        // "no-ternary": "off",
+        // "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
+        // "one-var": ["error", "never"],
+        // "prefer-named-capture-group": "off",
+        // "sort-imports": ["error", { "allowSeparatedGroups": true }],
+        // "sort-keys": "off",
+
+        // // React rules.
+        // "react/destructuring-assignment": ["error", "never"],
+        "react/jsx-closing-bracket-location": ["error", {
+            "nonEmpty": "after-props"
+        }],
+        "react/jsx-curly-brace-presence": ["error", {
+            "props": "never",
+            "children": "always",
+            "propElementValues": "always"
+        }],
+        "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+        "react/jsx-first-prop-new-line": ["error", "never"],
+        // "react/jsx-indent": "off",
+        "react/jsx-max-depth": ["error", { "max": 4 }],
+        "react/jsx-max-props-per-line": "off",
+        "react/jsx-newline": "off",
+        // "react/jsx-no-bind": "off",
+        "react/jsx-one-expression-per-line": ["error", {
+            "allow": "non-jsx"
+        }],
+        "react/jsx-sort-props": ["error", {
+            "callbacksLast": true,
+            "shorthandLast": true
+        }],
+
+        // // TypeScript rules.
+        // "@typescript-eslint/class-methods-use-this": "off",
+        // "@typescript-eslint/consistent-indexed-object-style": "off",
+        // "@typescript-eslint/consistent-type-imports": ["error", { "fixStyle": "inline-type-imports" }],
+        // "@typescript-eslint/lines-between-class-members": "off",
+        // "@typescript-eslint/max-params": "off",
+        "@typescript-eslint/naming-convention": ["error", {
+                "selector": "default",
+                "format": ["camelCase"],
+                "leadingUnderscore": "allow",
+                "trailingUnderscore": "allow"
+            }, {
+                "selector": ["import", "function"],
+                "format": ["camelCase", "PascalCase"]
+            }, {
+                "selector": "variable",
+                "format": ["camelCase", "UPPER_CASE"],
+                "leadingUnderscore": "allow",
+                "trailingUnderscore": "allow"
+            }, {
+                "selector": "typeLike",
+                "format": ["PascalCase"]
+            }
+        ],
+        // "@typescript-eslint/no-confusing-void-expression": ["error", { "ignoreArrowShorthand": true }],
+        // "@typescript-eslint/no-loop-func": "off",
+        // "@typescript-eslint/no-magic-numbers": "off",
+        // "@typescript-eslint/no-non-null-assertion": "off",
+        // "@typescript-eslint/no-type-alias": "off",
+        // "@typescript-eslint/object-curly-spacing": "off",
+        // "@typescript-eslint/parameter-properties": "off",
+        // "@typescript-eslint/prefer-destructuring": "off",
+        // "@typescript-eslint/prefer-readonly-parameter-types": "off",
+        // "@typescript-eslint/prefer-reduce-type-parameter": "off",
+        // "@typescript-eslint/prefer-nullish-coalescing": ["error", { "ignoreConditionalTests": true }],
+        // "@typescript-eslint/space-before-function-paren": "off",
+        // "@typescript-eslint/strict-boolean-expressions": "off",
+        // "@typescript-eslint/restrict-template-expressions": "off"
+
+        // Stylistic rules.
+        "@stylistic/object-curly-spacing": ["error", "always"],
+        "@stylistic/padded-blocks": ["error", "never"],
+        "@stylistic/quote-props": ["error", "consistent-as-needed"],
+        "@stylistic/space-before-function-paren": ["error", {
+            "anonymous": "always",
+            "named": "never",
+            "asyncArrow": "always"
+        }]
+    }
 }
