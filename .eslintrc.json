@@ -15,7 +15,6 @@
     "rules": {
 
         // JavaScript rules.
-        // "array-element-newline": ["error", "consistent"],
         // "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
         // "capitalized-comments": "off",
         // "dot-location": "error",
@@ -60,7 +59,9 @@
         "react/jsx-max-depth": ["error", { "max": 4 }],
         "react/jsx-max-props-per-line": "off",
         "react/jsx-newline": "off",
-        // "react/jsx-no-bind": "off",
+        "react/jsx-no-bind": ["error", {
+            "allowArrowFunctions": true
+        }],
         "react/jsx-one-expression-per-line": ["error", {
             "allow": "non-jsx"
         }],
@@ -101,7 +102,9 @@
         // "@typescript-eslint/object-curly-spacing": "off",
         // "@typescript-eslint/parameter-properties": "off",
         // "@typescript-eslint/prefer-destructuring": "off",
-        // "@typescript-eslint/prefer-readonly-parameter-types": "off",
+        "@typescript-eslint/prefer-readonly-parameter-types": ["error", {
+            "ignoreInferredTypes": true
+        }],
         // "@typescript-eslint/prefer-reduce-type-parameter": "off",
         // "@typescript-eslint/prefer-nullish-coalescing": ["error", { "ignoreConditionalTests": true }],
         // "@typescript-eslint/space-before-function-paren": "off",
@@ -109,9 +112,17 @@
         // "@typescript-eslint/restrict-template-expressions": "off"
 
         // Stylistic rules.
+        "@stylistic/array-element-newline": ["error", "consistent"],
+        "@stylistic/brace-style": ["error", "1tbs", {
+            "allowSingleLine": true
+        }],
+        "@stylistic/function-call-argument-newline": ["error", "consistent"],
         "@stylistic/object-curly-spacing": ["error", "always"],
         "@stylistic/padded-blocks": ["error", "never"],
         "@stylistic/quote-props": ["error", "consistent-as-needed"],
+        "@stylistic/semi": ["error", "always", {
+            "omitLastInOneLineBlock": true
+        }],
         "@stylistic/space-before-function-paren": ["error", {
             "anonymous": "always",
             "named": "never",
