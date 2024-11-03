@@ -22,7 +22,7 @@ export default function Spotalyze(): React.JSX.Element {
                 <p className="text-center">{"Spotalyze. © SOTY 2024"}</p>
                 <span className="flex justify-center">
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
-                        fetch(`/api/spotalyze/playlists/get-csv?url=${textInput}`).catch((error: unknown) => console.error(error));
+                        fetch(`/spotalyze/api/playlists/get-csv?url=${textInput}`).catch((error: unknown) => console.error(error));
                     }}>{"Download CSV"}
                     </button>
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
