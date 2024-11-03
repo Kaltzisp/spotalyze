@@ -27,7 +27,9 @@
         }],
         // "function-call-argument-newline": ["error", "consistent"],
         // "guard-for-in": "off",
-        // "id-length": "off",
+        "id-length": ["error", {
+            "exceptions": ["i", "j", "k"]
+        }],
         // "indent": ["error", 4, { "SwitchCase": 1 }],
         // "max-depth": ["error", 6],
         // "linebreak-style": "off",
@@ -111,7 +113,7 @@
             "ignoreArrowShorthand": true
         }],
         // "@typescript-eslint/no-loop-func": "off",
-        // "@typescript-eslint/no-magic-numbers": "off",
+        "@typescript-eslint/no-magic-numbers": "off",
         // "@typescript-eslint/no-non-null-assertion": "off",
         // "@typescript-eslint/no-type-alias": "off",
         // "@typescript-eslint/object-curly-spacing": "off",
