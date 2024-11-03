@@ -19,6 +19,9 @@
         // "capitalized-comments": "off",
         // "dot-location": "error",
         // "eol-last": "error",
+        "camelcase": ["error", {
+            "properties": "never"
+        }],
         "func-style": ["error", "declaration", {
             "allowArrowFunctions": false
         }],
@@ -42,7 +45,9 @@
         "one-var": ["error", "never"],
         // "prefer-named-capture-group": "off",
         // "sort-imports": ["error", { "allowSeparatedGroups": true }],
-        // "sort-keys": "off",
+        "sort-keys": ["error", "asc", {
+            "minKeys": 5
+        }],
 
         // // React rules.
         "react/destructuring-assignment": ["error", "never"],
@@ -90,9 +95,15 @@
                 "format": ["camelCase", "UPPER_CASE"],
                 "leadingUnderscore": "allow",
                 "trailingUnderscore": "allow"
+            },  {
+                "selector": "objectLiteralProperty",
+                "format": null
             }, {
                 "selector": "typeLike",
                 "format": ["PascalCase"]
+            }, {
+                "selector": "typeProperty",
+                "format": ["snake_case"]
             }
         ],
         "@typescript-eslint/no-confusing-void-expression": ["error", {
