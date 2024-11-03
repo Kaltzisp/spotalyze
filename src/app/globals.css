@@ -31,6 +31,16 @@ body {
     @apply bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc]
 }
 
+.color-unauth {
+    background-color:  #1ED760;
+    @apply border-black text-background hover:bg-[#19310a] dark:hover:bg-[#82f7ab]
+}
+
+.color-auth {
+    background-color:  #666666;
+    @apply border-black text-background hover:bg-[#19310a] dark:hover:bg-[#82f7ab]
+}
+
 .color-invert {
     @apply  bg-background text-foreground hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] 
 }
