@@ -40,7 +40,7 @@
         "no-console": "off",
         // "no-negated-condition": "off",
         // "no-underscore-dangle": "off",
-        // "no-ternary": "off",
+        "no-ternary": "off",
         // "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
         "one-var": ["error", "never"],
         // "prefer-named-capture-group": "off",
@@ -129,6 +129,7 @@
             "allowSingleLine": true
         }],
         "@stylistic/function-call-argument-newline": ["error", "consistent"],
+        "@stylistic/multiline-ternary": ["error", "never"],
         "@stylistic/newline-per-chained-call": "off",
         "@stylistic/object-curly-spacing": ["error", "always"],
         "@stylistic/padded-blocks": ["error", "never"],
