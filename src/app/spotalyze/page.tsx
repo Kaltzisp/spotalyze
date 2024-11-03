@@ -26,7 +26,7 @@ export default function Spotalyze(): React.JSX.Element {
                     }}>{"Download CSV"}
                     </button>
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
-                        fetch(`/api/spotalyze/playlists/shuffle?url=${textInput}`).catch((error: unknown) => console.error(error));
+                        fetch(`/spotalyze/api/playlists/shuffle?url=${textInput}`).catch((error: unknown) => console.error(error));
                     }}>{"Shuffle"}
                     </button>
                     <button className="nice-button color-invert" type="button">{"Authenticate"}</button>
