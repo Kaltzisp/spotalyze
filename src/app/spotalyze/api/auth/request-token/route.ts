@@ -1,9 +1,9 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { spotifyRedirectUri } from "../login/route";
 
 export async function GET(request: NextRequest): Promise<Response> {
     const authCode = request.nextUrl.searchParams.get("code");
-    const response = await fetch("https://accounts.spotify.com/api/token", {
+    const apiResponse = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -11,7 +11,13 @@ export async function GET(request: NextRequest): Promise<Response> {
         },
         body: `code=${authCode}&redirect_uri=${spotifyRedirectUri}&grant_type=authorization_code`
     });
-    const data = await response.json() as { access_token: string };
+    const data = await apiResponse.json() as { access_token: string };
     process.env.SPOTIFY_USER_TOKEN = data.access_token;
-    return Response.redirect("http://localhost:3000/spotalyze");
+    const response = NextResponse.redirect("http://localhost:3000/spotalyze");
+    response.cookies.set("spotify_token", data.access_token, {
+        maxAge: 3600,
+        path: "/spotalyze",
+        sameSite: "strict"
+    });
+    return response;
 }
