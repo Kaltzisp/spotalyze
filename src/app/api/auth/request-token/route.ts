@@ -15,7 +15,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     process.env.SPOTIFY_USER_TOKEN = data.access_token;
     const response = NextResponse.redirect("http://localhost:3000/spotalyze");
     response.cookies.set("spotify_token", data.access_token, {
-        path: "/spotalyze",
+        path: "/",
         sameSite: "strict"
     });
     return response;
