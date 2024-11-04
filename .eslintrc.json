@@ -16,7 +16,7 @@
 
         // JavaScript rules.
         // "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
-        // "capitalized-comments": "off",
+        "capitalized-comments": "off",
         // "dot-location": "error",
         // "eol-last": "error",
         "camelcase": ["error", {
