@@ -1,9 +1,7 @@
-import { type SpotifyTrack, Track } from "./Track";
+import { type SpotifyPlaylistItem, Track } from "./Track";
 
-interface PlaylistResponse {
-    items: {
-        track: SpotifyTrack;
-    }[];
+interface SpotifyPlaylistResponse {
+    items: SpotifyPlaylistItem[];
     offset: number;
     total: number;
 }
@@ -13,13 +11,13 @@ export class Playlist {
     private readonly id: string;
 
     public constructor(playlistUrl: string) {
-        this.id = playlistUrl.split("/").pop()?.split("?").shift() ?? playlistUrl;
+        this.id = playlistUrl.split("/").at(-1)?.split("?")[0] ?? playlistUrl;
     }
 
     public async getTracks(token: string): Promise<void> {
         let allTracksConsumed = false;
         let currentOffset = 0;
-        const spotifyTracks: SpotifyTrack[] = [];
+        const spotifyTracks: SpotifyPlaylistItem[] = [];
         while (!allTracksConsumed) {
             // eslint-disable-next-line no-await-in-loop
             const response = await fetch(`https://api.spotify.com/v1/playlists/${this.id}/tracks?offset=${currentOffset}`, {
@@ -28,8 +26,8 @@ export class Playlist {
                 }
             });
             // eslint-disable-next-line no-await-in-loop
-            const playlistInfo = await response.json() as PlaylistResponse;
-            playlistInfo.items.forEach((item) => spotifyTracks.push(item.track));
+            const playlistInfo = await response.json() as SpotifyPlaylistResponse;
+            playlistInfo.items.forEach((item) => spotifyTracks.push(item));
             if (playlistInfo.offset + playlistInfo.items.length >= playlistInfo.total) {
                 allTracksConsumed = true;
             } else {
