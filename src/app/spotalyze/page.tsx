@@ -14,7 +14,7 @@ export default function Spotalyze(): React.JSX.Element {
             <main className="flex flex-col gap-8">
                 <span className="flex justify-center gap-5">
                     <button className={`nice-button ${authButtonClass}`} type="button" onClick={() => {
-                        window.location.href = "/spotalyze/api/auth/login";
+                        window.location.href = "/api/auth/login";
                     }}>{"Authenticate"}
                     </button>
                     <input className="nice-button color-norm" placeholder="Spotify Track URL" type="text" value={textInput} onChange={(event) => setTextInput(event.target.value)} />
@@ -22,11 +22,11 @@ export default function Spotalyze(): React.JSX.Element {
                 <p className="text-center">{"Spotalyze. © SOTY 2024"}</p>
                 <span className="flex justify-center">
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
-                        fetch(`/spotalyze/api/playlists/get-csv?url=${textInput}`).catch((error: unknown) => console.error(error));
+                        fetch(`/api/playlists/get-csv?url=${textInput}`).catch((error: unknown) => console.error(error));
                     }}>{"Download CSV"}
                     </button>
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
-                        fetch(`/spotalyze/api/playlists/shuffle?url=${textInput}`).catch((error: unknown) => console.error(error));
+                        fetch(`/api/playlists/shuffle?url=${textInput}`).catch((error: unknown) => console.error(error));
                     }}>{"Shuffle"}
                     </button>
                     <button className="nice-button color-invert" type="button">{"Authenticate"}</button>
