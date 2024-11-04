@@ -28,7 +28,7 @@
         // "function-call-argument-newline": ["error", "consistent"],
         // "guard-for-in": "off",
         "id-length": ["error", {
-            "exceptions": ["i", "j", "k"]
+            "exceptions": ["a", "b", "i", "j", "k"]
         }],
         // "indent": ["error", 4, { "SwitchCase": 1 }],
         // "max-depth": ["error", 6],
@@ -106,7 +106,7 @@
                 "format": ["PascalCase"]
             }, {
                 "selector": "typeProperty",
-                "format": ["snake_case"]
+                "format": null
             }
         ],
         "@typescript-eslint/no-confusing-void-expression": ["error", {
@@ -118,7 +118,10 @@
         // "@typescript-eslint/no-type-alias": "off",
         // "@typescript-eslint/object-curly-spacing": "off",
         // "@typescript-eslint/parameter-properties": "off",
-        // "@typescript-eslint/prefer-destructuring": "off",
+        "@typescript-eslint/prefer-destructuring": ["error", {
+            "array": false,
+            "object": false
+        }],
         "@typescript-eslint/prefer-readonly-parameter-types": "off",
         // "@typescript-eslint/prefer-reduce-type-parameter": "off",
         // "@typescript-eslint/prefer-nullish-coalescing": ["error", { "ignoreConditionalTests": true }],
