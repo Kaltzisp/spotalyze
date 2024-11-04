@@ -1,4 +1,4 @@
-export const spotifyRedirectUri = "http://localhost:3000/spotalyze/api/auth/request-token";
+export const spotifyRedirectUri = "http://localhost:3000/api/auth/request-token";
 
 export function GET(): Response {
     if (typeof process.env.SPOTIFY_CLIENT_ID === "undefined" || typeof process.env.SPOTIFY_CLIENT_SECRET === "undefined") {
