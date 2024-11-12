@@ -1,12 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import type { Track } from "../../api/playlists/Track";
+import type { TrackResults } from "../../api/playlists/submit-results/route";
+import { useRouter } from "next/navigation";
 
 export interface TextFile {
     name: string;
     content: string;
 }
 
+interface RankedTrack extends Track {
+    scores: TrackResults;
+    total: number;
+}
+
 export default function Spotalyze(): React.JSX.Element {
+    const router = useRouter();
     const [authButtonClass, setAuthButtonClass] = useState("color-norm");
     const [textInput, setTextInput] = useState("");
     const [showDropbox, setShowDropbox] = useState(false);
@@ -30,15 +39,18 @@ export default function Spotalyze(): React.JSX.Element {
         }
     }
 
-    function handleFileSumbission(): void {
+    async function handleFileSumbission(): Promise<void> {
         setShowDropbox(false);
-        fetch("/api/results/submit", {
+        const response = await fetch("/api/playlists/submit-results", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(files)
-        }).catch((error: unknown) => console.error(error));
+        });
+        const tracks = await response.json() as RankedTrack[];
+        sessionStorage.setItem("tracks", JSON.stringify(tracks));
+        router.push("/soty/view");
     }
 
     return (
@@ -74,7 +86,7 @@ export default function Spotalyze(): React.JSX.Element {
                 </div> : null}
                 <button className="nice-button color-invert" type="button" onClick={() => {
                     if (showDropbox) {
-                        handleFileSumbission();
+                        handleFileSumbission().catch((error: unknown) => console.error(error));
                         setShowDropbox(false);
                     } else {
                         setShowDropbox(true);
