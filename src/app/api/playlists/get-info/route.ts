@@ -14,8 +14,10 @@ export async function GET(request: NextRequest): Promise<Response> {
     const playlist = new Playlist(playlistUrl);
     await playlist.getTracks(spotifyToken.value);
     playlist.tracks = await Promise.all(playlist.tracks.map(async (track) => track.getEarliestReleaseDate()));
-    playlist.tracks.sort((a, b) => a.dateReleased.getTime() - b.dateReleased.getTime());
+
+    // Writing to JSON and CSV.
+    writeFileSync("./data/PlaylistInfo.json", JSON.stringify(playlist, null, 4), "utf8");
     const output = playlist.tracks.map((track) => track.toCsvRow()).join("\n");
-    writeFileSync("./data/PlaylistInfo.csv", output, "utf8");
+    writeFileSync("./data/Playlists/PlaylistInfo.csv", output, "utf8");
     return new Response("Success");
 }

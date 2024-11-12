@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import type { Playlist } from "../../playlists/Playlist";
+import type { Playlist } from "../Playlist";
 import type { TextFile } from "@/app/soty/home/page";
 import { parse } from "papaparse";
 import { readFileSync } from "fs";

@@ -11,14 +11,19 @@ export interface SpotifyPlaylistItem {
         id: string;
         album: {
             release_date: string;
+            images: {
+                url: string;
+            }[];
         };
         artists: {
             name: string;
         }[];
         name: string;
+        duration_ms: number;
         external_ids: {
             isrc: string;
         };
+        popularity: number;
     };
 }
 
@@ -30,6 +35,9 @@ export class Track {
     public dateReleased: JSDate;
     public readonly dateAdded: JSDate;
     public readonly addedBy: string;
+    public readonly albumImageUrl: string;
+    public readonly duration: number;
+    public readonly spotifyPopularity: number;
 
     public constructor(item: SpotifyPlaylistItem) {
         this.id = item.track.id;
@@ -39,6 +47,9 @@ export class Track {
         this.dateReleased = new JSDate(item.track.album.release_date);
         this.dateAdded = new JSDate(item.added_at);
         this.addedBy = item.added_by.id;
+        this.albumImageUrl = item.track.album.images[0].url;
+        this.duration = item.track.duration_ms;
+        this.spotifyPopularity = item.track.popularity;
     }
 
     public async getEarliestReleaseDate(): Promise<Track> {

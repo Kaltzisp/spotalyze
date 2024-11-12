@@ -13,7 +13,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     });
     const data = await apiResponse.json() as { access_token: string };
     process.env.SPOTIFY_USER_TOKEN = data.access_token;
-    const response = NextResponse.redirect("http://localhost:3000/spotalyze");
+    const response = NextResponse.redirect("http://localhost:3000/soty/home");
     response.cookies.set("spotify_token", data.access_token, {
         path: "/",
         sameSite: "strict"
