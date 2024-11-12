@@ -44,6 +44,9 @@
         "no-console": "off",
         // "no-negated-condition": "off",
         // "no-underscore-dangle": "off",
+        "no-plusplus": ["error", {
+            "allowForLoopAfterthoughts": true
+        }],
         "no-ternary": "off",
         // "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
         "one-var": ["error", "never"],
@@ -58,6 +61,7 @@
         "react/jsx-closing-bracket-location": ["error", {
             "nonEmpty": "after-props"
         }],
+        "react/jsx-closing-tag-location": ["error", "line-aligned"],
         "react/jsx-curly-brace-presence": ["error", {
             "props": "never",
             "children": "always",
@@ -82,7 +86,7 @@
 
         // // TypeScript rules.
         // "@typescript-eslint/class-methods-use-this": "off",
-        // "@typescript-eslint/consistent-indexed-object-style": "off",
+        "@typescript-eslint/consistent-indexed-object-style": ["error", "index-signature"],
         // "@typescript-eslint/consistent-type-imports": ["error", { "fixStyle": "inline-type-imports" }],
         // "@typescript-eslint/max-params": "off",
         "@typescript-eslint/naming-convention": ["error", {
@@ -131,6 +135,7 @@
 
         // Stylistic rules.
         "@stylistic/array-element-newline": ["error", "consistent"],
+        "@stylistic/array-bracket-newline": ["error", "consistent"],
         "@stylistic/brace-style": ["error", "1tbs", {
             "allowSingleLine": true
         }],
