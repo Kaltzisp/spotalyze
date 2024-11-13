@@ -20,7 +20,7 @@ export default function PlayedTracks(props: PlayedTracksProps): React.JSX.Elemen
     }, [props.trackIndex]);
 
     return (
-        <div className={`top-[3rem] fixed flex justify-center items-center gap-[6rem] ease-in-out duration-${props.fadeDuration} ${props.visible ? "opacity-100" : "invisible opacity-0"}`}>
+        <div className={`flex justify-center items-center gap-[6rem] ease-in-out duration-${props.fadeDuration} ${props.visible ? "opacity-100" : "invisible opacity-0"}`}>
             {recentTracks.map((track, index) => {
                 const trackNumber = 160 - props.trackIndex - index + recentTracks.length;
                 const trackName = track.name.replace(/\(.*\)/gu, "").split(" - ")[0].trim();
