@@ -9,7 +9,7 @@ export interface TextFile {
     content: string;
 }
 
-interface RankedTrack extends Track {
+export interface RankedTrack extends Track {
     scores: TrackResults;
     total: number;
 }
@@ -50,7 +50,7 @@ export default function Spotalyze(): React.JSX.Element {
         });
         const tracks = await response.json() as RankedTrack[];
         sessionStorage.setItem("tracks", JSON.stringify(tracks));
-        router.push("/soty/view");
+        router.push("/soty/slideshow");
     }
 
     return (
