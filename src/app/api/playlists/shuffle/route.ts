@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { Playlist } from "../Playlist";
+import { shuffle } from "../../utils";
 
 interface CreatePlaylistResponse {
     id: string;
@@ -19,11 +20,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     }
     const playlist = new Playlist(playlistUrl);
     await playlist.getTracks(spotifyToken.value);
-    const trackURIs = playlist.tracks.map((track) => `spotify:track:${track.id}`);
-    for (let i = trackURIs.length - 1; i >= 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [trackURIs[i], trackURIs[j]] = [trackURIs[j], trackURIs[i]];
-    }
+    const trackURIs = shuffle(playlist.tracks.map((track) => `spotify:track:${track.id}`));
     const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
         method: "POST",
         headers: {
