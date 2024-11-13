@@ -3,8 +3,8 @@ import type { RankedTrack } from "../../home/page";
 import React from "react";
 
 export default function TrackInfo(props: {
-    readonly trackVisible: boolean;
     readonly track: RankedTrack;
+    readonly trackIndex: number | undefined;
 }): React.JSX.Element {
     const track = props.track;
 
@@ -19,9 +19,10 @@ export default function TrackInfo(props: {
     }
 
     return (
-        <div className={`flex gap-10 duration-1000 ease-in-out justify-center ${props.trackVisible ? "opacity-100" : "invisible opacity-0"}`}>
+        <div className="flex gap-10 justify-center">
             <img className="max-w-[512px] w-[512px] flex-1 border-white border box-border" src={track.albumImageUrl} />
             <div className="max-w-[512px] flex-1 flex flex-col gap-5">
+                <span className="text-4xl">{`# ${160 - (props.trackIndex ?? 0)}`}</span>
                 <span className="text-5xl">{track.name}</span>
                 <span className="text-xl">{track.artists.replaceAll(";", ",")}</span>
                 <div className="flex flex-col justify-end h-full text-xl">
@@ -40,6 +41,14 @@ export default function TrackInfo(props: {
                     <span className="flex">
                         <p className="w-[150px]">{"Added by: "}</p>
                         <p className="w-[150px] text-center">{getUser(track.addedBy)}</p>
+                    </span>
+                    <span className="flex mt-5">
+                        <p className="w-[150px]">{"Indieometer: "}</p>
+                        <p className="w-[150px] text-center">{`${100 - track.spotifyPopularity}%`}</p>
+                    </span>
+                    <span className="flex mt-5 text-2xl">
+                        <p className="w-[150px]">{"Total score: "}</p>
+                        <p className="w-[150px] text-center">{Object.values(props.track.scores).reduce((acc, score) => acc + score.rank, 0)}</p>
                     </span>
                 </div>
             </div>

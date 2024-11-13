@@ -1,43 +1,22 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { JSDate } from "@/app/api/playlists/JSDate";
+import PlayedTracks from "./Components/PlayedTracks";
 import type { RankedTrack } from "../home/page";
-import { useRouter } from "next/navigation";
 import TrackInfo from "./Components/TrackInfo";
+import UserRanks from "./Components/UserRanks";
+import { useRouter } from "next/navigation";
 
 export default function Slideshow(): React.JSX.Element {
     const router = useRouter();
+
     const [tracks, setTracks] = useState<RankedTrack[]>([]);
     const [trackIndex, setTrackIndex] = useState<number>();
     const [track, setTrack] = useState<RankedTrack>();
+    const [playedTracks, setPlayedTracks] = useState<RankedTrack[]>([]);
 
     const [quote, setQuote] = useState<string>();
     const [quoteVisible, setQuoteVisible] = useState(false);
-
     const [trackVisible, setTrackVisible] = useState(false);
-
-    /*
-     * function randomPick<T>(arr: T[]): T {
-     *     return arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
-     * }
-     */
-
-    function getUser(id: string): string {
-        switch (id) {
-            case "imadale": return "Ari";
-            case "omgodmez": return "Pete";
-            case "22kbyr6xgy7hm242spzpbvpya": return "Doug";
-            case "31c2acpfbyw7zgewg5wxerdyeyye": return "Mog";
-            default: return "Unknown";
-        }
-    }
-
-    function getSuffix(number: number): string {
-        const suffixes = ["st", "nd", "rd"];
-        const lastDigit = number % 10;
-        return suffixes[lastDigit - 1] || "th";
-    }
-
 
     useEffect(() => {
         const storedTracks = sessionStorage.getItem("tracks");
@@ -53,9 +32,6 @@ export default function Slideshow(): React.JSX.Element {
         if (typeof trackIndex === "number") {
             if (trackIndex < tracks.length) {
                 setTrack(tracks[trackIndex]);
-                setTimeout(() => {
-                    setTrackIndex(trackIndex + 1);
-                }, track?.duration);
             } else {
                 router.push("/soty/view");
             }
@@ -64,9 +40,16 @@ export default function Slideshow(): React.JSX.Element {
 
     useEffect(() => {
         if (typeof track !== "undefined") {
+            // Adding to played tracks.
+            setPlayedTracks([...playedTracks, track]);
+
+            // Incrementing the track index.
+            setTimeout(() => {
+                setTrackIndex((previousIndex) => (previousIndex ?? 0) + 1);
+            }, 20000);
             setTimeout(() => {
                 setTrackVisible(false);
-            }, track.duration - 1000);
+            }, 20000 - 1000);
 
             // Showing a quote.
             const notes = Object.values(track.scores).map((result) => result.notes).filter((note) => note !== "");
@@ -85,20 +68,11 @@ export default function Slideshow(): React.JSX.Element {
 
     return (
         <main className="flex p-8 justify-center">
-            {typeof track === "undefined" ? null : <div className="relative flex items-center justify-center">
-                <div>
-                    <TrackInfo track={track} trackVisible={trackVisible} />
-                    <div className="mt-[150px] flex gap-[300px] justify-center">
-                        {Object.entries(track.scores).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => (
-                            <div className="flex flex-col flex-1 text-center gap-5" key={key}>
-                                <span className="text-5xl font-serif">
-                                    {value.rank}
-                                    <sup>{getSuffix(value.rank)}</sup>
-                                </span>
-                                <span>{key}</span>
-                            </div>
-                        ))}
-                    </div>
+            {typeof track === "undefined" ? null : <div className="relative flex flex-col items-center justify-center">
+                <div className={`duration-1000 ease-in-out ${trackVisible ? "opacity-100" : "invisible opacity-0"}`}>
+                    <PlayedTracks playedTracks={playedTracks} trackIndex={trackIndex} />
+                    <TrackInfo track={track} trackIndex={trackIndex} />
+                    <UserRanks track={track} />
                 </div>
                 <span className={`fixed p-20 text-5xl font-serif duration-1000 ease-in-out text-justify ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}>
                     {`“ ${quote?.trim()} ”`}
