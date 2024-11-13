@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PlayedTracks from "./Components/PlayedTracks";
-import type { RankedTrack } from "../home/page";
+import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
 import TrackInfo from "./Components/TrackInfo";
 import UserRanks from "./Components/UserRanks";
 import { useRouter } from "next/navigation";

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import type { Track } from "../../api/playlists/Track";
-import type { TrackResults } from "../../api/playlists/submit-results/route";
+import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
 import { useRouter } from "next/navigation";
 
 export interface TextFile {
@@ -9,10 +8,6 @@ export interface TextFile {
     content: string;
 }
 
-export interface RankedTrack extends Track {
-    scores: TrackResults;
-    total: number;
-}
 
 export default function Spotalyze(): React.JSX.Element {
     const router = useRouter();

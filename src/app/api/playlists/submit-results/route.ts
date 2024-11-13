@@ -1,3 +1,4 @@
+import type { JSDate } from "../JSDate";
 import type { NextRequest } from "next/server";
 import type { Playlist } from "../Playlist";
 import type { TextFile } from "@/app/soty/home/page";
@@ -14,6 +15,20 @@ export interface TrackResults {
 
 interface Results {
     [trackId: string]: TrackResults;
+}
+
+export interface RankedTrack {
+    addedBy: string;
+    albumImageUrl: string;
+    artists: string;
+    dateAdded: JSDate;
+    dateReleased: JSDate;
+    duration: number;
+    name: string;
+    place: number;
+    scores: TrackResults;
+    spotifyPopularity: number;
+    total: number;
 }
 
 export async function POST(request: NextRequest): Promise<Response> {
@@ -63,11 +78,26 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
 
     const playlist = JSON.parse(readFileSync("./data/PlaylistInfo.json", "utf8")) as Playlist;
-    const tracks = shuffle(playlist.tracks.map((track) => ({
-        ...track,
+    const tracks: RankedTrack[] = shuffle(playlist.tracks.map((track) => ({
+        addedBy: track.addedBy,
+        albumImageUrl: track.albumImageUrl,
+        artists: track.artists,
+        dateAdded: track.dateAdded,
+        dateReleased: track.dateReleased,
+        duration: track.duration,
+        name: track.name,
+        place: 0,
         scores: results[track.id],
+        spotifyPopularity: track.spotifyPopularity,
         total: Object.values(results[track.id]).reduce((acc, score) => acc + score.rank, 0)
     }))).sort((a, b) => b.total - a.total);
+    for (let i = 0; i < tracks.length; i++) {
+        if (i > 0 && tracks[i].total === tracks[i - 1].total) {
+            tracks[i].place = tracks[i - 1].place;
+        } else {
+            tracks[i].place = i + 1;
+        }
+    }
 
     return new Response(JSON.stringify(tracks), { status: 200 });
 }

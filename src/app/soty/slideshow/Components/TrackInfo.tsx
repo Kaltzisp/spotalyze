@@ -1,5 +1,5 @@
 import { JSDate } from "@/app/api/playlists/JSDate";
-import type { RankedTrack } from "../../home/page";
+import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
 import React from "react";
 
 export default function TrackInfo(props: {

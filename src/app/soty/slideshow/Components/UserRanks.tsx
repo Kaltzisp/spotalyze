@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import type { RankedTrack } from "../../home/page";
+import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
 import { shuffle } from "@/app/api/utils";
 
 export default function UserRanks(props: {
