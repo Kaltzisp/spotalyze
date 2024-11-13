@@ -143,6 +143,9 @@
         "@stylistic/lines-between-class-members": "off",
         "@stylistic/multiline-ternary": ["error", "never"],
         "@stylistic/newline-per-chained-call": "off",
+        "@stylistic/no-extra-parens": ["error", "all", {
+            "ignoreJSX": "multi-line"
+        }],
         "@stylistic/object-curly-spacing": ["error", "always"],
         "@stylistic/padded-blocks": ["error", "never"],
         "@stylistic/quote-props": ["error", "consistent-as-needed"],
