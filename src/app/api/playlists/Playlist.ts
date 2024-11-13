@@ -1,4 +1,12 @@
 import { type SpotifyPlaylistItem, Track } from "./Track";
+import { readFileSync } from "fs";
+
+interface CreatePlaylistResponse {
+    id: string;
+    external_urls: {
+        spotify: string;
+    };
+}
 
 interface SpotifyPlaylistResponse {
     items: SpotifyPlaylistItem[];
@@ -12,6 +20,43 @@ export class Playlist {
 
     public constructor(playlistUrl: string) {
         this.id = playlistUrl.split("/").at(-1)?.split("?")[0] ?? playlistUrl;
+    }
+
+    public static async create(trackURIs: string[], name: string, description: string, imagePath?: string): Promise<string> {
+        const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${process.env.SPOTIFY_USER_TOKEN}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name,
+                description,
+                public: true
+            })
+        });
+        const data = await response.json() as CreatePlaylistResponse;
+        while (trackURIs.length > 0) {
+            // eslint-disable-next-line no-await-in-loop
+            await fetch(`https://api.spotify.com/v1/playlists/${data.id}/tracks`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${process.env.SPOTIFY_USER_TOKEN}` },
+                body: JSON.stringify({ uris: trackURIs.splice(0, 100) })
+            });
+        }
+        if (typeof imagePath === "string") {
+            const res = await fetch(`https://api.spotify.com/v1/playlists/${data.id}/images`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${process.env.SPOTIFY_USER_TOKEN}`,
+                    "Content-Type": "image/jpeg"
+                },
+                body: readFileSync(imagePath).toString("base64")
+            });
+            const dat = await res.json() as unknown;
+            console.log(dat);
+        }
+        return data.external_urls.spotify;
     }
 
     public async getTracks(token: string): Promise<void> {
