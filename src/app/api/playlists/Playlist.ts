@@ -45,7 +45,7 @@ export class Playlist {
             });
         }
         if (typeof imagePath === "string") {
-            const res = await fetch(`https://api.spotify.com/v1/playlists/${data.id}/images`, {
+            await fetch(`https://api.spotify.com/v1/playlists/${data.id}/images`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${process.env.SPOTIFY_USER_TOKEN}`,
@@ -53,8 +53,6 @@ export class Playlist {
                 },
                 body: readFileSync(imagePath).toString("base64")
             });
-            const dat = await res.json() as unknown;
-            console.log(dat);
         }
         return data.external_urls.spotify;
     }
