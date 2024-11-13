@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 
 export default function Slideshow(): React.JSX.Element {
     const router = useRouter();
+    const fadeInPrelude = 3000;
+    const fadeDuration = 1000;
+    const quoteDuration = 5000;
 
     const [tracks, setTracks] = useState<RankedTrack[]>([]);
     const [trackIndex, setTrackIndex] = useState<number>();
@@ -46,35 +49,35 @@ export default function Slideshow(): React.JSX.Element {
             // Incrementing the track index.
             setTimeout(() => {
                 setTrackIndex((previousIndex) => (previousIndex ?? 0) + 1);
-            }, 20000);
+            }, track.duration);
             setTimeout(() => {
                 setTrackVisible(false);
-            }, 20000 - 1000);
+            }, track.duration - fadeInPrelude);
 
             // Showing a quote.
             const notes = Object.values(track.scores).map((result) => result.notes).filter((note) => note !== "");
             if (notes.length > 0) {
                 setQuote(notes[Math.floor(Math.random() * notes.length)]);
                 setQuoteVisible(true);
-                setTimeout(() => setQuoteVisible(false), 5000);
+                setTimeout(() => setQuoteVisible(false), quoteDuration);
             }
 
             // Showing the track.
             setTimeout(() => {
                 setTrackVisible(true);
-            }, 5500);
+            }, quoteDuration + fadeDuration / 2);
         }
     }, [track]);
 
     return (
         <main className="flex p-8 justify-center">
             {typeof track === "undefined" ? null : <div className="relative flex flex-col items-center justify-center">
-                <div className={`duration-1000 ease-in-out ${trackVisible ? "opacity-100" : "invisible opacity-0"}`}>
+                <div className={`duration-${fadeDuration} ease-in-out ${trackVisible ? "opacity-100" : "invisible opacity-0"}`}>
                     <PlayedTracks playedTracks={playedTracks} trackIndex={trackIndex} />
-                    <TrackInfo track={track} trackIndex={trackIndex} />
+                    <TrackInfo track={track} trackIndex={trackIndex} tracks={tracks} />
                     <UserRanks track={track} />
                 </div>
-                <span className={`fixed p-20 text-5xl font-serif duration-1000 ease-in-out text-justify ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}>
+                <span className={`fixed p-20 text-5xl font-serif duration-${fadeDuration} ease-in-out text-justify ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}>
                     {`“ ${quote?.trim()} ”`}
                 </span>
             </div>}
