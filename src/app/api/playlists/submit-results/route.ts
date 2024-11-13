@@ -3,6 +3,7 @@ import type { Playlist } from "../Playlist";
 import type { TextFile } from "@/app/soty/home/page";
 import { parse } from "papaparse";
 import { readFileSync } from "fs";
+import { shuffle } from "../../utils";
 
 export interface TrackResults {
     [owner: string]: {
@@ -62,11 +63,11 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
 
     const playlist = JSON.parse(readFileSync("./data/PlaylistInfo.json", "utf8")) as Playlist;
-    const tracks = playlist.tracks.map((track) => ({
+    const tracks = shuffle(playlist.tracks.map((track) => ({
         ...track,
         scores: results[track.id],
         total: Object.values(results[track.id]).reduce((acc, score) => acc + score.rank, 0)
-    })).sort((a, b) => b.total - a.total);
+    }))).sort((a, b) => b.total - a.total);
 
     return new Response(JSON.stringify(tracks), { status: 200 });
 }
