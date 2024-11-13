@@ -1,6 +1,6 @@
 import type { JSDate } from "../JSDate";
 import type { NextRequest } from "next/server";
-import type { Playlist } from "../Playlist";
+import { Playlist } from "../Playlist";
 import type { TextFile } from "@/app/soty/home/page";
 import { parse } from "papaparse";
 import { readFileSync } from "fs";
@@ -18,6 +18,7 @@ interface Results {
 }
 
 export interface RankedTrack {
+    id: string;
     addedBy: string;
     albumImageUrl: string;
     artists: string;
@@ -85,6 +86,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         dateAdded: track.dateAdded,
         dateReleased: track.dateReleased,
         duration: track.duration,
+        id: track.id,
         name: track.name,
         place: 0,
         scores: results[track.id],
@@ -100,5 +102,9 @@ export async function POST(request: NextRequest): Promise<Response> {
     }
     tracks.sort((a, b) => b.place - a.place);
 
+    // Creating final ranking playlist.
+    const trackURIs = tracks.map((track) => `spotify:track:${track.id}`);
+    const newPlaylistUrl = await Playlist.create(trackURIs, "2024 SOTY Countdown", "It begins...", "./data/2024_Image.jpg");
+    console.log(`Created playlist: ${newPlaylistUrl}`);
     return new Response(JSON.stringify(tracks), { status: 200 });
 }
