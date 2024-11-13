@@ -24,8 +24,7 @@ export default function PlayedTracks(props: PlayedTracksProps): React.JSX.Elemen
             {recentTracks.map((track, index) => {
                 const trackNumber = 160 - props.trackIndex - index + recentTracks.length;
                 const trackName = track.name.replace(/\(.*\)/gu, "").split(" - ")[0].trim();
-                const trackScore = Object.values(track.scores).reduce((acc, score) => acc + score.rank, 0);
-                return <span className="text-center" key={trackNumber}>{`${trackNumber}. ${trackName} (${trackScore})`}</span>;
+                return <span className="text-center" key={trackNumber}>{`${trackNumber}. ${trackName} (${track.total})`}</span>;
             })}
         </div>
     );
