@@ -90,7 +90,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         scores: results[track.id],
         spotifyPopularity: track.spotifyPopularity,
         total: Object.values(results[track.id]).reduce((acc, score) => acc + score.rank, 0)
-    }))).sort((a, b) => b.total - a.total);
+    }))).sort((a, b) => a.total - b.total);
     for (let i = 0; i < tracks.length; i++) {
         if (i > 0 && tracks[i].total === tracks[i - 1].total) {
             tracks[i].place = tracks[i - 1].place;
@@ -98,6 +98,7 @@ export async function POST(request: NextRequest): Promise<Response> {
             tracks[i].place = i + 1;
         }
     }
+    tracks.sort((a, b) => b.place - a.place);
 
     return new Response(JSON.stringify(tracks), { status: 200 });
 }

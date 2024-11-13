@@ -5,6 +5,7 @@ import React from "react";
 export default function TrackInfo(props: {
     readonly track: RankedTrack;
     readonly trackIndex: number | undefined;
+    readonly tracks: RankedTrack[];
 }): React.JSX.Element {
     const track = props.track;
 
@@ -18,11 +19,17 @@ export default function TrackInfo(props: {
         }
     }
 
+    function isTied(rankedTrack: RankedTrack): boolean {
+        return props.tracks.filter((tr) => tr.place === rankedTrack.place).length > 1;
+    }
+
     return (
         <div className="flex gap-10 justify-center">
             <img className="max-w-[512px] w-[512px] flex-1 border-white border box-border" src={track.albumImageUrl} />
             <div className="max-w-[512px] flex-1 flex flex-col gap-5">
-                <span className="text-4xl">{`# ${160 - (props.trackIndex ?? 0)}`}</span>
+                {typeof props.trackIndex === "number" ? <span className="text-4xl">
+                    {`# ${isTied(track) ? "=" : ""}${track.place}`}
+                </span> : null}
                 <span className="text-5xl">{track.name}</span>
                 <span className="text-xl">{track.artists.replaceAll(";", ",")}</span>
                 <div className="flex flex-col justify-end h-full text-xl">
