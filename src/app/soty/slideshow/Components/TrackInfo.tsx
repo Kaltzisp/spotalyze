@@ -1,12 +1,17 @@
+import React, { useEffect } from "react";
 import { JSDate } from "@/app/api/playlists/JSDate";
 import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
-import React from "react";
 
-export default function TrackInfo(props: {
+interface TrackInfoProps {
+    readonly quoteDuration: number;
+    readonly nQuotes: number;
     readonly track: RankedTrack;
-    readonly trackIndex: number | undefined;
+    readonly trackIndex: number;
     readonly tracks: RankedTrack[];
-}): React.JSX.Element {
+}
+
+export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
+    const [scoreVisible, setScoreVisible] = React.useState(false);
     const track = props.track;
 
     function getUser(id: string): string {
@@ -23,10 +28,18 @@ export default function TrackInfo(props: {
         return props.tracks.filter((tr) => tr.place === rankedTrack.place).length > 1;
     }
 
+    useEffect(() => {
+        if (typeof props.track !== "undefined") {
+            setTimeout(() => {
+                setScoreVisible(true);
+            }, props.quoteDuration * (props.nQuotes + Object.keys(track.scores).length));
+        }
+    }, [props.track]);
+
     return (
         <div className="flex gap-10 justify-center">
             <img className="max-w-[512px] w-[512px] flex-1 border-white border box-border" src={track.albumImageUrl} />
-            <div className="max-w-[512px] flex-1 flex flex-col gap-5">
+            <div className="max-w-[512px] w-[512px] flex-1 flex flex-col gap-5">
                 {typeof props.trackIndex === "number" ? <span className="text-4xl">
                     {`# ${isTied(track) ? "=" : ""}${track.place}`}
                 </span> : null}
@@ -49,13 +62,9 @@ export default function TrackInfo(props: {
                         <p className="w-[150px]">{"Added by: "}</p>
                         <p className="w-[150px] text-center">{getUser(track.addedBy)}</p>
                     </span>
-                    <span className="flex mt-5">
-                        <p className="w-[150px]">{"Indieometer: "}</p>
-                        <p className="w-[150px] text-center">{`${100 - track.spotifyPopularity}%`}</p>
-                    </span>
-                    <span className="flex mt-5 text-2xl">
-                        <p className="w-[150px]">{"Total score: "}</p>
-                        <p className="w-[150px] text-center">{Object.values(props.track.scores).reduce((acc, score) => acc + score.rank, 0)}</p>
+                    <span className={`flex mt-10 mb-2 text-3xl duration-1000 ease-in-out ${scoreVisible ? "opacity-100" : "invisible opacity-0"}`}>
+                        <p className="w-[150px]">{"Score: "}</p>
+                        <p className="w-[150px] text-center">{props.track.total}</p>
                     </span>
                 </div>
             </div>
