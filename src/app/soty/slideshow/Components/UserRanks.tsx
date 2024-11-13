@@ -5,21 +5,13 @@ import { shuffle } from "@/app/api/utils";
 export default function UserRanks(props: {
     readonly track: RankedTrack;
 }): React.JSX.Element {
+    const [scores, setScores] = React.useState<{
+        user: string;
+        notes: string;
+        rank: number;
+        place: number;
+    }[]>();
     const [scoresVisible, setScoresVisible] = React.useState<number>();
-    const scores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
-        user: key,
-        notes: value.notes,
-        rank: value.rank,
-        place: 1
-    }));
-
-    for (let i = 0; i < scores.length; i++) {
-        if (i > 0 && scores[i].rank === scores[i - 1].rank) {
-            scores[i].place = scores[i - 1].place;
-        } else {
-            scores[i].place = i + 1;
-        }
-    }
 
     function getSuffix(number: number): string {
         const suffixes = ["st", "nd", "rd"];
@@ -30,12 +22,26 @@ export default function UserRanks(props: {
     useEffect(() => {
         setTimeout(() => {
             setScoresVisible(0);
+            const userScores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
+                user: key,
+                notes: value.notes,
+                rank: value.rank,
+                place: 1
+            }));
+            for (let i = 0; i < userScores.length; i++) {
+                if (i > 0 && userScores[i].rank === userScores[i - 1].rank) {
+                    userScores[i].place = userScores[i - 1].place;
+                } else {
+                    userScores[i].place = i + 1;
+                }
+            }
+            setScores(userScores);
         }, 5000);
     }, [props.track]);
 
     useEffect(() => {
         if (typeof scoresVisible === "number") {
-            if (scoresVisible < scores.length) {
+            if (scoresVisible < (scores?.length ?? 0)) {
                 setTimeout(() => {
                     setScoresVisible((previous) => (previous ?? 0) + 1);
                 }, 3000);
@@ -45,7 +51,7 @@ export default function UserRanks(props: {
 
     return (
         <div className="mt-[6rem] flex gap-[12rem] justify-center">
-            {scores.map((score) => (
+            {scores?.map((score) => (
                 <div className={`flex flex-col flex-1 text-center gap-3 w-[12rem] font-serif duration-1000
                 ${scores.length - score.place <= (scoresVisible ?? 0) ? "opacity-100" : "invisible opacity-0"}`} key={score.user}>
                     <span className="text-5xl font-serif">
