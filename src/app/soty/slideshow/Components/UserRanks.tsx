@@ -1,11 +1,25 @@
 import React, { useEffect } from "react";
 import type { RankedTrack } from "../../home/page";
+import { shuffle } from "@/app/api/utils";
 
 export default function UserRanks(props: {
     readonly track: RankedTrack;
 }): React.JSX.Element {
     const [scoresVisible, setScoresVisible] = React.useState<number>();
-    const scores = Object.entries(props.track.scores).sort((a, b) => a[1].rank - b[1].rank);
+    const scores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
+        user: key,
+        notes: value.notes,
+        rank: value.rank,
+        place: 1
+    }));
+
+    for (let i = 0; i < scores.length; i++) {
+        if (i > 0 && scores[i].rank === scores[i - 1].rank) {
+            scores[i].place = scores[i - 1].place;
+        } else {
+            scores[i].place = i + 1;
+        }
+    }
 
     function getSuffix(number: number): string {
         const suffixes = ["st", "nd", "rd"];
@@ -31,15 +45,15 @@ export default function UserRanks(props: {
 
     return (
         <div className="mt-[6rem] flex gap-[12rem] justify-center">
-            {scores.map(([key, value], index) => (
+            {scores.map((score) => (
                 <div className={`flex flex-col flex-1 text-center gap-3 w-[12rem] font-serif duration-1000
-                ${scores.length - index <= (scoresVisible ?? 0) ? "opacity-100" : "invisible opacity-0"}`} key={key}>
+                ${scores.length - score.place <= (scoresVisible ?? 0) ? "opacity-100" : "invisible opacity-0"}`} key={score.user}>
                     <span className="text-5xl font-serif">
-                        {value.rank}
-                        <sup>{getSuffix(value.rank)}</sup>
+                        {score.rank}
+                        <sup>{getSuffix(score.rank)}</sup>
                     </span>
-                    <span className="text-2xl mt-7">{key}</span>
-                    <span>{`“ ${value.notes.trim()} but the world goes round and round. ”`}</span>
+                    <span className="text-2xl mt-7">{score.user}</span>
+                    <span>{`“ ${score.notes.trim()} but the world goes round and round. ”`}</span>
                 </div>
             ))}
         </div>
