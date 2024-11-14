@@ -13,6 +13,7 @@ interface TrackInfoProps {
 
 export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
     const [scoreVisible, setScoreVisible] = React.useState(false);
+    const [scoreVisibleTimeout, setScoreVisibleTimeout] = React.useState<NodeJS.Timeout>();
 
     function getUser(id: string): string {
         switch (id) {
@@ -29,12 +30,13 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
     }
 
     useEffect(() => {
+        clearTimeout(scoreVisibleTimeout);
         if (typeof props.track !== "undefined") {
             const nQuotes = Object.values(props.track.scores).map((result) => result.notes).filter((note) => note !== "").length;
             setScoreVisible(false);
-            setTimeout(() => {
+            setScoreVisibleTimeout(setTimeout(() => {
                 setScoreVisible(true);
-            }, props.quoteDuration * (nQuotes + Object.keys(props.track.scores).length + 1));
+            }, props.quoteDuration * (nQuotes + Object.keys(props.track.scores).length + 1)));
         }
     }, [props.track]);
 
