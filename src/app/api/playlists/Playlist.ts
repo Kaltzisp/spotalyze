@@ -57,6 +57,19 @@ export class Playlist {
         return data.external_urls.spotify;
     }
 
+    public static async play(playlistId: string): Promise<void> {
+        await fetch("https://api.spotify.com/v1/me/player/play", {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${process.env.SPOTIFY_USER_TOKEN}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                context_uri: `spotify:playlist:${playlistId}`
+            })
+        });
+    }
+
     public async getTracks(token: string): Promise<void> {
         let allTracksConsumed = false;
         let currentOffset = 0;
