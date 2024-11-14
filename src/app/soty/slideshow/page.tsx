@@ -1,25 +1,28 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PlayedTracks from "./Components/PlayedTracks";
+import Quote from "./Components/Quote";
 import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
 import TrackInfo from "./Components/TrackInfo";
 import UserRanks from "./Components/UserRanks";
 import { useRouter } from "next/navigation";
 
+const quoteDuration = 5000;
+const fadeDuration = 1000;
+const trackLeadIn = 3000;
+
 export default function Slideshow(): React.JSX.Element {
     const router = useRouter();
-    const fadeInPrelude = 3000;
-    const fadeDuration = 1000;
-    const quoteDuration = 5000;
 
     const [tracks, setTracks] = useState<RankedTrack[]>([]);
-    const [trackIndex, setTrackIndex] = useState<number>();
+    const [trackIndex, setTrackIndex] = useState(0);
     const [track, setTrack] = useState<RankedTrack>();
-    const [playedTracks, setPlayedTracks] = useState<RankedTrack[]>([]);
+    const [quotes, setQuotes] = useState<string[]>([]);
+    const [trackInfoVisible, setTrackInfoVisible] = useState(false);
 
-    const [quote, setQuote] = useState<string>();
-    const [quoteVisible, setQuoteVisible] = useState(false);
-    const [trackVisible, setTrackVisible] = useState(false);
+    const [hideTrackInfoTimeout, setHideTrackInfoTimeout] = useState<NodeJS.Timeout>();
+    const [trackIncrementTimeout, setTrackIncrementTimeout] = useState<NodeJS.Timeout>();
+    const [showTrackInfoTimeout, setShowTrackInfoTimeout] = useState<NodeJS.Timeout>();
 
     useEffect(() => {
         const storedTracks = sessionStorage.getItem("tracks");
@@ -29,58 +32,56 @@ export default function Slideshow(): React.JSX.Element {
             setTracks(JSON.parse(storedTracks) as RankedTrack[]);
             setTrackIndex(0);
         }
+        document.addEventListener("keydown", (event) => {
+            switch (event.key) {
+                case "ArrowRight":
+                    setTrackIndex((previousIndex) => previousIndex + 1);
+                    break;
+                case "ArrowLeft":
+                    setTrackIndex((previousIndex) => previousIndex - 1);
+                    break;
+                default:
+                    break;
+            }
+        });
     }, []);
 
     useEffect(() => {
-        if (typeof trackIndex === "number") {
+        setTrackInfoVisible(false);
+        clearTimeout(hideTrackInfoTimeout);
+        clearTimeout(trackIncrementTimeout);
+        clearTimeout(showTrackInfoTimeout);
+        if (tracks.length > 0) {
             if (trackIndex < tracks.length) {
                 setTrack(tracks[trackIndex]);
             } else {
                 router.push("/soty/view");
             }
         }
-    }, [trackIndex]);
+    }, [trackIndex, tracks]);
 
     useEffect(() => {
         if (typeof track !== "undefined") {
-            // Adding to played tracks.
-            setPlayedTracks([...playedTracks, track]);
-
-            // Incrementing the track index.
-            setTimeout(() => {
-                setTrackIndex((previousIndex) => (previousIndex ?? 0) + 1);
-            }, track.duration);
-            setTimeout(() => {
-                setTrackVisible(false);
-            }, track.duration - fadeInPrelude);
-
-            // Showing a quote.
-            const notes = Object.values(track.scores).map((result) => result.notes).filter((note) => note !== "");
-            if (notes.length > 0) {
-                setQuote(notes[Math.floor(Math.random() * notes.length)]);
-                setQuoteVisible(true);
-                setTimeout(() => setQuoteVisible(false), quoteDuration);
-            }
-
-            // Showing the track.
-            setTimeout(() => {
-                setTrackVisible(true);
-            }, quoteDuration + fadeDuration / 2);
+            setQuotes(Object.values(track.scores).map((result) => result.notes).filter((note) => note !== ""));
+            setHideTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(false), track.duration - trackLeadIn));
+            setTrackIncrementTimeout(setTimeout(() => setTrackIndex((previousIndex) => previousIndex + 1), track.duration));
         }
     }, [track]);
 
+    useEffect(() => {
+        if (quotes.length > 0) {
+            setShowTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(true), quoteDuration * quotes.length + fadeDuration / 2));
+        }
+    }, [quotes]);
+
     return (
-        <main className="flex p-8 justify-center">
-            {typeof track === "undefined" ? null : <div className="relative flex flex-col items-center justify-center">
-                <div className={`duration-${fadeDuration} ease-in-out ${trackVisible ? "opacity-100" : "invisible opacity-0"}`}>
-                    <PlayedTracks playedTracks={playedTracks} trackIndex={trackIndex} />
-                    <TrackInfo track={track} trackIndex={trackIndex} tracks={tracks} />
-                    <UserRanks track={track} />
-                </div>
-                <span className={`fixed p-20 text-5xl font-serif duration-${fadeDuration} ease-in-out text-justify ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}>
-                    {`“ ${quote?.trim()} ”`}
-                </span>
-            </div>}
-        </main>
+        <main className="flex justify-center items-center">
+            <Quote fadeDuration={fadeDuration} quoteDuration={quoteDuration} quotes={quotes} />
+            <div className="flex flex-col gap-[5rem] justify-center items-center">
+                <PlayedTracks fadeDuration={fadeDuration} trackIndex={trackIndex} tracks={tracks} visible={trackInfoVisible} />
+                {track ? <TrackInfo fadeDuration={fadeDuration} quoteDuration={quoteDuration} track={track} trackIndex={trackIndex} visible={trackInfoVisible} /> : null}
+                {track ? <UserRanks fadeDuration={fadeDuration} quoteDuration={quoteDuration} track={track} visible={trackInfoVisible} /> : null}
+            </div>
+        </main >
     );
 }
