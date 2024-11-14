@@ -26,10 +26,24 @@ export interface RankedTrack {
     dateReleased: JSDate;
     duration: number;
     name: string;
-    place: number;
     scores: TrackResults;
     spotifyPopularity: number;
     total: number;
+}
+
+function rankString(track: RankedTrack): string {
+    return Object.values(track.scores).sort((a, b) => a.rank - b.rank).map((score) => score.rank.toString().padStart(3, "0")).join("");
+}
+
+function rankWithoutOutlier(track: RankedTrack): number {
+    const ranks = Object.values(track.scores).map((score) => score.rank);
+    const mean = ranks.reduce((acc, rank) => acc + rank, 0) / ranks.length;
+    const scores = ranks.map((rank) => ({
+        rank,
+        variance: Math.abs(rank - mean)
+    }));
+    scores.sort((a, b) => a.variance - b.variance).pop();
+    return scores.reduce((acc, score) => acc + score.rank, 0);
 }
 
 export async function POST(request: NextRequest): Promise<Response> {
@@ -88,19 +102,15 @@ export async function POST(request: NextRequest): Promise<Response> {
         duration: track.duration,
         id: track.id,
         name: track.name,
-        place: 0,
         scores: results[track.id],
         spotifyPopularity: track.spotifyPopularity,
         total: Object.values(results[track.id]).reduce((acc, score) => acc + score.rank, 0)
-    }))).sort((a, b) => a.total - b.total);
-    for (let i = 0; i < tracks.length; i++) {
-        if (i > 0 && tracks[i].total === tracks[i - 1].total) {
-            tracks[i].place = tracks[i - 1].place;
-        } else {
-            tracks[i].place = i + 1;
-        }
-    }
-    tracks.sort((a, b) => b.place - a.place);
+    })));
+
+    // Sorting by highest scores to lowest -> removing outliers -> total score.
+    tracks.sort((a, b) => rankString(a).localeCompare(rankString(b)));
+    tracks.sort((a, b) => rankWithoutOutlier(a) - rankWithoutOutlier(b));
+    tracks.sort((a, b) => b.total - a.total);
 
     // Creating final ranking playlist.
     const trackURIs = tracks.map((track) => `spotify:track:${track.id}`);
