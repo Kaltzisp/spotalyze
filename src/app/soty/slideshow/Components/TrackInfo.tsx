@@ -39,7 +39,8 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
     }, [props.track]);
 
     return (
-        <div className={`flex gap-10 justify-center duration-${props.fadeDuration} ease-in-out ${props.visible ? "opacity-100" : "invisible opacity-0"}`}>
+        <div className={`flex gap-10 justify-center ease-in-out ${props.visible ? "opacity-100" : "invisible opacity-0"}`}
+            style={{ transitionDuration: `${props.fadeDuration}ms` }}>
             <img className="max-w-[512px] w-[512px] flex-1 border-white border box-border" src={props.track.albumImageUrl} />
             <div className="max-w-[512px] w-[512px] flex-1 flex flex-col gap-5">
                 {typeof props.trackIndex === "number" ? <span className="text-4xl">
@@ -64,7 +65,8 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
                         <p className="w-[150px]">{"Added by: "}</p>
                         <p className="w-[150px] text-center">{getUser(props.track.addedBy)}</p>
                     </span>
-                    <span className={`flex mt-10 mb-2 text-3xl duration-${props.fadeDuration} ease-in-out ${scoreVisible ? "opacity-100" : "invisible opacity-0"}`}>
+                    <span className={`flex mt-10 mb-2 text-3xl ease-in-out ${scoreVisible ? "opacity-100" : "invisible opacity-0"}`}
+                        style={{ transitionDuration: `${props.fadeDuration}ms` }}>
                         <p className="w-[150px]">{"Score: "}</p>
                         <p className="w-[150px] text-center">{props.track.total}</p>
                     </span>
