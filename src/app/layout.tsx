@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout(props: Readonly<{ children: React.ReactNode }>): React.JSX.Element {
     return (
         <html lang="en">
-            <body className="antialiased animate-[colorCycle_45s_linear_infinite]">
+            <body className="antialiased select-none animate-[colorCycle_45s_linear_infinite]">
                 {props.children}
             </body>
         </html>
