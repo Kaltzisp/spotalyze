@@ -63,16 +63,16 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
     }, [scoresVisible]);
 
     return (
-        <div className="flex gap-[12rem] justify-center">
+        <div className="flex gap-[4rem] justify-center">
             {scores.map((score) => (
-                <div className={`flex flex-col flex-1 text-center gap-3 w-[12rem] font-serif ease-in-out ${scores.length - score.place <= scoresVisible - 1 && props.visible && scoresAreVisible ? "opacity-100" : "invisible opacity-0"}`}
+                <div className={`flex flex-col flex-1 text-center gap-2 w-[24rem] font-serif ease-in-out ${scores.length - score.place <= scoresVisible - 1 && props.visible && scoresAreVisible ? "opacity-100" : "invisible opacity-0"}`}
                     key={score.user} style={{ transitionDuration: `${props.fadeDuration}ms` }}>
                     <span className="text-5xl font-serif">
                         {score.rank}
                         <sup>{getSuffix(score.rank)}</sup>
                     </span>
                     <span className="text-2xl mt-5">{score.user}</span>
-                    <span>{`“${score.notes.trim()}${(/[.!?]/gu).test(score.notes.trim().at(-1) ?? score.notes) ? "" : "."}”`}</span>
+                    <span className="text-2xl">{`“${score.notes.trim()}${(/[.!?]/gu).test(score.notes.trim().at(-1) ?? "") ? "" : "."}”`}</span>
                 </div>
             ))}
         </div >
