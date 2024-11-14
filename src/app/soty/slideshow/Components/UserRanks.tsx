@@ -19,15 +19,22 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
 
     const [scoresVisible, setScoresVisible] = React.useState(0);
     const [scoresAreVisible, setScoresAreVisible] = React.useState(false);
+    const [scoresTimeout, setScoresTimeout] = React.useState<NodeJS.Timeout>();
     const scoreDelay = 5000;
 
     function getSuffix(number: number): string {
-        const suffixes = ["st", "nd", "rd"];
+        const suffixes = ["th", "st", "nd", "rd"];
         const lastDigit = number % 10;
-        return suffixes[lastDigit - 1] || "th";
+        const lastTwoDigits = number % 100;
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+            return "th";
+        }
+        return suffixes[lastDigit] || "th";
     }
 
     useEffect(() => {
+        setScoresAreVisible(false);
+        clearTimeout(scoresTimeout);
         const nQuotes = Object.values(props.track.scores).map((result) => result.notes).filter((note) => note !== "").length;
         const userScores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
             user: key,
@@ -43,16 +50,15 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
             }
         }
         setScores(userScores);
-        setScoresAreVisible(false);
-        setTimeout(() => {
+        setScoresTimeout(setTimeout(() => {
             setScoresVisible(1);
             setScoresAreVisible(true);
-        }, props.quoteDuration * (nQuotes + 1));
+        }, props.quoteDuration * (nQuotes + 1)));
     }, [props.track]);
 
     useEffect(() => {
         if (scoresVisible < scores.length) {
-            setTimeout(() => setScoresVisible((previous) => previous + 1), scoreDelay);
+            setScoresTimeout(setTimeout(() => setScoresVisible((previous) => previous + 1), scoreDelay));
         }
     }, [scoresVisible]);
 
