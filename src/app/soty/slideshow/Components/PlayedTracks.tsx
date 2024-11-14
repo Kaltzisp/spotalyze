@@ -15,12 +15,13 @@ export default function PlayedTracks(props: PlayedTracksProps): React.JSX.Elemen
 
     useEffect(() => {
         if (props.tracks.length > 0) {
-            setRecentTracks(props.tracks.slice(props.trackIndex - nRecentTracks, props.trackIndex));
+            setRecentTracks(props.tracks.slice(Math.max(props.trackIndex - nRecentTracks, 0), props.trackIndex));
         }
-    }, [props.trackIndex]);
+    }, [props.trackIndex, props.tracks]);
 
     return (
-        <div className={`flex justify-center items-center gap-[6rem] ease-in-out duration-${props.fadeDuration} ${props.visible ? "opacity-100" : "invisible opacity-0"}`}>
+        <div className={`flex justify-center items-center gap-[6rem] ease-in-out ${props.visible ? "opacity-100" : "invisible opacity-0"}`}
+            style={{ transitionDuration: `${props.fadeDuration}ms` }}>
             {recentTracks.map((track, index) => {
                 const trackNumber = 160 - props.trackIndex - index + recentTracks.length;
                 const trackName = track.name.replace(/\(.*\)/gu, "").split(" - ")[0].trim();
