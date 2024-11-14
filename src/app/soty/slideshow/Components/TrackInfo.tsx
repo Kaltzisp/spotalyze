@@ -27,11 +27,10 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
     useEffect(() => {
         clearTimeout(scoreVisibleTimeout);
         if (typeof props.track !== "undefined") {
-            const nQuotes = Object.values(props.track.scores).map((result) => result.notes).filter((note) => note !== "").length;
             setScoreVisible(false);
             setScoreVisibleTimeout(setTimeout(() => {
                 setScoreVisible(true);
-            }, props.quoteDuration * (nQuotes + Object.keys(props.track.scores).length + 1)));
+            }, props.quoteDuration * (Object.keys(props.track.scores).length + 1)));
         }
     }, [props.track]);
 

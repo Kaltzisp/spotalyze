@@ -35,7 +35,9 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
 
     function animateScore(score: number, trackName: string): string {
         if (trackName === "Spinning") {
-            return "animate-[spin_1.3s_linear_infinite]";
+            return "animate-[spin_3s_linear_infinite]";
+        } else if (score > 155) {
+            return "animate-[pulse_1.7s_linear_infinite]";
         } else if (score <= 10) {
             return "animate-[ping_1.3s_linear_infinite]";
         }
@@ -45,7 +47,6 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
     useEffect(() => {
         setScoresAreVisible(false);
         clearTimeout(scoresTimeout);
-        const nQuotes = Object.values(props.track.scores).map((result) => result.notes).filter((note) => note !== "").length;
         const userScores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
             user: key,
             notes: value.notes,
@@ -63,7 +64,7 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
         setScoresTimeout(setTimeout(() => {
             setScoresVisible(1);
             setScoresAreVisible(true);
-        }, props.quoteDuration * (nQuotes + 1)));
+        }, props.quoteDuration * 2));
     }, [props.track]);
 
     useEffect(() => {

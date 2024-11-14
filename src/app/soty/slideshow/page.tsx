@@ -7,7 +7,7 @@ import TrackInfo from "./Components/TrackInfo";
 import UserRanks from "./Components/UserRanks";
 import { useRouter } from "next/navigation";
 
-const quoteDuration = 5000;
+const quoteDuration = 10000;
 const fadeDuration = 1000;
 const trackLeadIn = 3000;
 
@@ -70,7 +70,7 @@ export default function Slideshow(): React.JSX.Element {
 
     useEffect(() => {
         if (quotes.length > 0) {
-            setShowTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(true), quoteDuration * quotes.length + fadeDuration / 2));
+            setShowTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(true), quoteDuration + fadeDuration / 2));
         }
     }, [quotes]);
 

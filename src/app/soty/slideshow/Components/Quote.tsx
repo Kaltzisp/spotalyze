@@ -22,7 +22,6 @@ export default function Quote(props: QuoteProps): React.JSX.Element {
     const [quote, setQuote] = useState<string>();
     const [quoteVisible, setQuoteVisible] = useState(false);
     const [quoteTimeout, setQuoteTimeout] = useState<NodeJS.Timeout>();
-    const [quoteInterval, setQuoteInterval] = useState<NodeJS.Timeout>();
 
     function randomPick<T>(arr: T[]): T {
         return arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
@@ -35,18 +34,10 @@ export default function Quote(props: QuoteProps): React.JSX.Element {
     }
 
     useEffect(() => {
-        clearInterval(quoteInterval);
         clearTimeout(quoteTimeout);
         if (props.quotes.length > 0) {
             const quoteList = [...props.quotes];
             cycleQuote(randomPick(quoteList));
-            setQuoteInterval(setInterval(() => {
-                if (quoteList.length > 0) {
-                    cycleQuote(randomPick(quoteList));
-                } else {
-                    clearInterval(quoteInterval);
-                }
-            }, props.quoteDuration));
         }
     }, [props.quotes]);
 
