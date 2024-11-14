@@ -44,7 +44,7 @@ export default function Spotalyze(): React.JSX.Element {
             body: JSON.stringify(files)
         });
         const tracks = await response.json() as RankedTrack[];
-        sessionStorage.setItem("tracks", JSON.stringify(tracks));
+        localStorage.setItem("tracks", JSON.stringify(tracks));
         router.push("/soty/slideshow");
     }
 

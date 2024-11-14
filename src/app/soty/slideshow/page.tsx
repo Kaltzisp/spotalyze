@@ -25,7 +25,7 @@ export default function Slideshow(): React.JSX.Element {
     const [showTrackInfoTimeout, setShowTrackInfoTimeout] = useState<NodeJS.Timeout>();
 
     useEffect(() => {
-        const storedTracks = sessionStorage.getItem("tracks");
+        const storedTracks = localStorage.getItem("tracks");
         if (storedTracks === null) {
             router.push("/soty/home");
         } else {
