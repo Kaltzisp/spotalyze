@@ -14,6 +14,13 @@
     }
 }
 
+@keyframes colorCycle {
+    0% { background-color: #200000; }
+    33% { background-color: #002000; }
+    67% { background-color: #000020; }
+    100% { background-color: #200000; }
+}
+
 body {
     align-content: center;
     height: 100vh;
