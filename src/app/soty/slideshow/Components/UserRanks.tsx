@@ -17,7 +17,8 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
         place: number;
     }[]>([]);
 
-    const [scoresVisible, setScoresVisible] = React.useState<number>(0);
+    const [scoresVisible, setScoresVisible] = React.useState(0);
+    const [scoresAreVisible, setScoresAreVisible] = React.useState(false);
     const scoreDelay = 5000;
 
     function getSuffix(number: number): string {
@@ -42,8 +43,10 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
             }
         }
         setScores(userScores);
+        setScoresAreVisible(false);
         setTimeout(() => {
             setScoresVisible(1);
+            setScoresAreVisible(true);
         }, props.quoteDuration * (nQuotes + 1));
     }, [props.track]);
 
@@ -56,8 +59,8 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
     return (
         <div className="flex gap-[12rem] justify-center">
             {scores.map((score) => (
-                <div className={`flex flex-col flex-1 text-center gap-3 w-[12rem] font-serif ease-in-out ${scores.length - score.place <= scoresVisible - 1 && props.visible ? "opacity-100" : "invisible opacity-0"}`} key={score.user}
-                    style={{ transitionDuration: `${props.fadeDuration}ms` }}>
+                <div className={`flex flex-col flex-1 text-center gap-3 w-[12rem] font-serif ease-in-out ${scores.length - score.place <= scoresVisible - 1 && props.visible && scoresAreVisible ? "opacity-100" : "invisible opacity-0"}`}
+                    key={score.user} style={{ transitionDuration: `${props.fadeDuration}ms` }}>
                     <span className="text-5xl font-serif">
                         {score.rank}
                         <sup>{getSuffix(score.rank)}</sup>
