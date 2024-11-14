@@ -35,7 +35,8 @@ export default function Quote(props: QuoteProps): React.JSX.Element {
     }, [props.quotes]);
 
     return (
-        <span className={`fixed pl-20 pr-20 text-5xl font-serif text-justify ease-in-out duration-${props.fadeDuration} ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}>
+        <span className={`fixed pl-20 pr-20 text-5xl font-serif text-justify ease-in-out duration-${props.fadeDuration} ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}
+            style={{ transitionDuration: `${props.fadeDuration}ms` }}>
             {typeof quote === "undefined" ? null : `“${quote.trim()}”`}
         </span>
     );
