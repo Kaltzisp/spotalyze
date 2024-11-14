@@ -7,7 +7,6 @@ interface TrackInfoProps {
     readonly quoteDuration: number;
     readonly track: RankedTrack;
     readonly trackIndex: number;
-    readonly tracks: RankedTrack[];
     readonly visible: boolean;
 }
 
@@ -23,10 +22,6 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
             case "31c2acpfbyw7zgewg5wxerdyeyye": return "Mog";
             default: return "Unknown";
         }
-    }
-
-    function isTied(rankedTrack: RankedTrack): boolean {
-        return props.tracks.filter((tr) => tr.place === rankedTrack.place).length > 1;
     }
 
     useEffect(() => {
@@ -46,7 +41,7 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
             <img className="max-w-[512px] w-[512px] flex-1 border-white border box-border" src={props.track.albumImageUrl} />
             <div className="max-w-[512px] w-[512px] flex-1 flex flex-col gap-5">
                 {typeof props.trackIndex === "number" ? <span className="text-4xl">
-                    {`# ${isTied(props.track) ? "=" : ""}${props.track.place}`}
+                    {`# ${160 - props.trackIndex}`}
                 </span> : null}
                 <span className="text-5xl">{props.track.name}</span>
                 <span className="text-xl">{props.track.artists.replaceAll(";", ",")}</span>
