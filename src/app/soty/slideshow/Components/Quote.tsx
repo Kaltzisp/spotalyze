@@ -9,6 +9,7 @@ interface QuoteProps {
 export default function Quote(props: QuoteProps): React.JSX.Element {
     const [quote, setQuote] = useState<string>();
     const [quoteVisible, setQuoteVisible] = useState(false);
+    const [quoteTimeout, setQuoteTimeout] = useState<NodeJS.Timeout>();
     const [quoteInterval, setQuoteInterval] = useState<NodeJS.Timeout>();
 
     function randomPick<T>(arr: T[]): T {
@@ -18,11 +19,12 @@ export default function Quote(props: QuoteProps): React.JSX.Element {
     function cycleQuote(string: string): void {
         setQuote(string);
         setQuoteVisible(true);
-        setTimeout(() => setQuoteVisible(false), props.quoteDuration - props.fadeDuration);
+        setQuoteTimeout(setTimeout(() => setQuoteVisible(false), props.quoteDuration - props.fadeDuration));
     }
 
     useEffect(() => {
         clearInterval(quoteInterval);
+        clearTimeout(quoteTimeout);
         if (props.quotes.length > 0) {
             const quoteList = [...props.quotes];
             cycleQuote(randomPick(quoteList));
