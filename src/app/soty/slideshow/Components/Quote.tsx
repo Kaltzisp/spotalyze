@@ -6,6 +6,18 @@ interface QuoteProps {
     readonly fadeDuration: number;
 }
 
+export function quotify(note: string): string {
+    const trimmedQuote = note.trim();
+    if (trimmedQuote === "") {
+        return "";
+    }
+    const lastChar = trimmedQuote.trim().at(-1);
+    if (typeof lastChar !== "undefined" && (/[.!?]/gu).test(lastChar)) {
+        return `“${trimmedQuote}”`;
+    }
+    return `“${trimmedQuote}.”`;
+}
+
 export default function Quote(props: QuoteProps): React.JSX.Element {
     const [quote, setQuote] = useState<string>();
     const [quoteVisible, setQuoteVisible] = useState(false);
@@ -41,7 +53,7 @@ export default function Quote(props: QuoteProps): React.JSX.Element {
     return (
         <span className={`fixed pl-20 pr-20 text-5xl font-serif text-justify ease-in-out duration-${props.fadeDuration} ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}
             style={{ transitionDuration: `${props.fadeDuration}ms` }}>
-            {typeof quote === "undefined" ? null : `“${quote.trim()}${(/[.!?]/gu).test(quote.trim().at(-1) ?? "") ? "" : "."}”`}
+            {typeof quote === "undefined" ? null : quotify(quote)}
         </span>
     );
 }

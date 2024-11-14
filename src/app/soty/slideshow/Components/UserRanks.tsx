@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
+import { quotify } from "./Quote";
 import { shuffle } from "@/app/api/utils";
 
 interface UserRanksProps {
@@ -72,7 +73,7 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
                         <sup>{getSuffix(score.rank)}</sup>
                     </span>
                     <span className="text-2xl mt-5">{score.user}</span>
-                    <span className="text-2xl">{`“${score.notes.trim()}${(/[.!?]/gu).test(score.notes.trim().at(-1) ?? "") ? "" : "."}”`}</span>
+                    <span className="text-2xl">{quotify(score.notes)}</span>
                 </div>
             ))}
         </div >
