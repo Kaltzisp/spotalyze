@@ -27,32 +27,66 @@ export interface SpotifyPlaylistItem {
     };
 }
 
+export interface Scores {
+    [userId: string]: {
+        rank: number;
+        note: string;
+    };
+}
+
 export class Track {
     public readonly id: string;
-    public readonly artists: string;
     public readonly name: string;
-    public readonly isrc: string;
-    public dateReleased: JSDate;
+    public readonly artists: string;
+    public readonly duration: number;
+    public readonly albumImageUrl: string;
     public readonly dateAdded: JSDate;
     public readonly addedBy: string;
-    public readonly albumImageUrl: string;
-    public readonly duration: number;
-    public readonly spotifyPopularity: number;
+    public readonly isrc: string;
+    public dateReleased: JSDate;
+    public scores?: Scores;
 
     public constructor(item: SpotifyPlaylistItem) {
         this.id = item.track.id;
-        this.artists = item.track.artists.map((artist) => artist.name).join("; ");
         this.name = item.track.name;
-        this.isrc = item.track.external_ids.isrc;
-        this.dateReleased = new JSDate(item.track.album.release_date);
+        this.artists = item.track.artists.map((artist) => artist.name).join("; ");
+        this.duration = item.track.duration_ms;
+        this.albumImageUrl = item.track.album.images[0].url;
         this.dateAdded = new JSDate(item.added_at);
         this.addedBy = item.added_by.id;
-        this.albumImageUrl = item.track.album.images[0].url;
-        this.duration = item.track.duration_ms;
-        this.spotifyPopularity = item.track.popularity;
+        this.isrc = item.track.external_ids.isrc;
+        this.dateReleased = new JSDate(item.track.album.release_date);
     }
 
-    public async getEarliestReleaseDate(): Promise<Track> {
+    public get scoreTotal(): number {
+        if (typeof this.scores === "undefined") {
+            throw new Error("Track not scored.");
+        }
+        return Object.values(this.scores).reduce((acc, score) => acc + score.rank, 0);
+    }
+
+    public get scoreString(): string {
+        if (typeof this.scores === "undefined") {
+            throw new Error("Track not scored.");
+        }
+        return Object.values(this.scores).sort((a, b) => a.rank - b.rank).map((score) => score.rank.toString().padStart(3, "0")).join("");
+    }
+
+    public get scoreNoOutlier(): number {
+        if (typeof this.scores === "undefined") {
+            throw new Error("Track not scored.");
+        }
+        const ranks = Object.values(this.scores).map((score) => score.rank);
+        const mean = ranks.reduce((acc, rank) => acc + rank, 0) / ranks.length;
+        const scores = ranks.map((rank) => ({
+            rank,
+            variance: Math.abs(rank - mean)
+        })).sort((a, b) => a.variance - b.variance);
+        scores.pop();
+        return scores.reduce((acc, score) => acc + score.rank, 0);
+    }
+
+    public async updateReleaseDate(): Promise<Track> {
         const musicbrainzDate = await getReleaseDateFromIsrc(this.isrc).catch(() => null);
         const geniusDate = await getReleaseDateFromGenius(this.name, this.artists).catch(() => null);
         const releaseDates = [this.dateReleased];
