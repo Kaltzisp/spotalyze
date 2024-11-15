@@ -55,7 +55,7 @@ export class Playlist {
             await fetch(`https://api.spotify.com/v1/playlists/${data.id}/images`, {
                 method: "PUT",
                 headers: {
-                    "Authorization": `Bearer ${process.env.SPOTIFY_USER_TOKEN}`,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "image/jpeg"
                 },
                 body: readFileSync(playlistImage).toString("base64")
