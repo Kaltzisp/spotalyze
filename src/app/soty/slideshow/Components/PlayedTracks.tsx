@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
+import type { Track } from "@/app/api/shared/Track";
 
 interface PlayedTracksProps {
     readonly fadeDuration: number;
-    readonly tracks: RankedTrack[];
+    readonly tracks: Track[];
     readonly trackIndex: number;
     readonly visible: boolean;
 }
@@ -11,7 +11,7 @@ interface PlayedTracksProps {
 const nRecentTracks = 5;
 
 export default function PlayedTracks(props: PlayedTracksProps): React.JSX.Element {
-    const [recentTracks, setRecentTracks] = useState<RankedTrack[]>([]);
+    const [recentTracks, setRecentTracks] = useState<Track[]>([]);
 
     useEffect(() => {
         if (props.tracks.length > 0) {
@@ -25,7 +25,7 @@ export default function PlayedTracks(props: PlayedTracksProps): React.JSX.Elemen
             {recentTracks.map((track, index) => {
                 const trackNumber = 160 - props.trackIndex - index + recentTracks.length;
                 const trackName = track.name.replace(/\(.*\)/gu, "").split(" - ")[0].trim();
-                return <span className="text-center text-xl" key={trackNumber}>{`${trackNumber}. ${trackName} (${track.total})`}</span>;
+                return <span className="text-center text-xl" key={trackNumber}>{`${trackNumber}. ${trackName} (${track.scoreTotal})`}</span>;
             })}
         </div>
     );

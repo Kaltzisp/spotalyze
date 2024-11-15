@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PlayedTracks from "./Components/PlayedTracks";
+import type { Playlist } from "@/app/api/shared/Playlist";
 import Quote from "./Components/Quote";
-import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
+import type { Track } from "@/app/api/shared/Track";
 import TrackInfo from "./Components/TrackInfo";
 import UserRanks from "./Components/UserRanks";
 import { useRouter } from "next/navigation";
@@ -14,9 +15,9 @@ const trackLeadIn = 3000;
 export default function Slideshow(): React.JSX.Element {
     const router = useRouter();
 
-    const [tracks, setTracks] = useState<RankedTrack[]>([]);
+    const [tracks, setTracks] = useState<Track[]>([]);
     const [trackIndex, setTrackIndex] = useState(0);
-    const [track, setTrack] = useState<RankedTrack>();
+    const [track, setTrack] = useState<Track>();
     const [quotes, setQuotes] = useState<string[]>([]);
     const [trackInfoVisible, setTrackInfoVisible] = useState(false);
 
@@ -25,11 +26,12 @@ export default function Slideshow(): React.JSX.Element {
     const [showTrackInfoTimeout, setShowTrackInfoTimeout] = useState<NodeJS.Timeout>();
 
     useEffect(() => {
-        const storedTracks = localStorage.getItem("tracks");
-        if (storedTracks === null) {
+        const playlistJson = localStorage.getItem("Playlist");
+        if (playlistJson === null) {
             router.push("/soty/home");
         } else {
-            setTracks(JSON.parse(storedTracks) as RankedTrack[]);
+            const playlist = JSON.parse(playlistJson) as Playlist;
+            setTracks(playlist.tracks);
             setTrackIndex(0);
         }
         document.addEventListener("keydown", (event) => {
@@ -61,8 +63,8 @@ export default function Slideshow(): React.JSX.Element {
     }, [trackIndex, tracks]);
 
     useEffect(() => {
-        if (typeof track !== "undefined") {
-            setQuotes(Object.values(track.scores).map((result) => result.notes).filter((note) => note !== ""));
+        if (typeof track?.scores !== "undefined") {
+            setQuotes(Object.values(track.scores).map((result) => result.note).filter((note) => note !== ""));
             setHideTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(false), track.duration - trackLeadIn));
             setTrackIncrementTimeout(setTimeout(() => setTrackIndex((previousIndex) => previousIndex + 1), track.duration));
         }

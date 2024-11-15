@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
+import type { Track } from "@/app/api/shared/Track";
 import { quotify } from "./Quote";
 import { shuffle } from "@/app/api/shared/utils";
 
 interface UserRanksProps {
     readonly fadeDuration: number;
     readonly quoteDuration: number;
-    readonly track: RankedTrack;
+    readonly track: Track;
     readonly visible: boolean;
 }
 
@@ -47,20 +47,22 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
     useEffect(() => {
         setScoresAreVisible(false);
         clearTimeout(scoresTimeout);
-        const userScores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
-            user: key,
-            notes: value.notes,
-            rank: value.rank,
-            place: 1
-        }));
-        for (let i = 0; i < userScores.length; i++) {
-            if (i > 0 && userScores[i].rank === userScores[i - 1].rank) {
-                userScores[i].place = userScores[i - 1].place;
-            } else {
-                userScores[i].place = i + 1;
+        if (typeof props.track.scores !== "undefined") {
+            const userScores = shuffle(Object.entries(props.track.scores)).sort((a, b) => a[1].rank - b[1].rank).map(([key, value]) => ({
+                user: key,
+                notes: value.note,
+                rank: value.rank,
+                place: 1
+            }));
+            for (let i = 0; i < userScores.length; i++) {
+                if (i > 0 && userScores[i].rank === userScores[i - 1].rank) {
+                    userScores[i].place = userScores[i - 1].place;
+                } else {
+                    userScores[i].place = i + 1;
+                }
             }
+            setScores(userScores);
         }
-        setScores(userScores);
         setScoresTimeout(setTimeout(() => {
             setScoresVisible(1);
             setScoresAreVisible(true);

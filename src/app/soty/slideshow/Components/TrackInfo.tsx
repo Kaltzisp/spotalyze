@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { JSDate } from "@/app/api/playlists/JSDate";
-import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
+import type { Track } from "@/app/api/shared/Track";
 
 interface TrackInfoProps {
     readonly fadeDuration: number;
     readonly quoteDuration: number;
-    readonly track: RankedTrack;
+    readonly track: Track;
     readonly trackIndex: number;
     readonly visible: boolean;
 }
@@ -28,9 +27,11 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
         clearTimeout(scoreVisibleTimeout);
         if (typeof props.track !== "undefined") {
             setScoreVisible(false);
-            setScoreVisibleTimeout(setTimeout(() => {
-                setScoreVisible(true);
-            }, props.quoteDuration * (Object.keys(props.track.scores).length + 1)));
+            if (typeof props.track.scores !== "undefined") {
+                setScoreVisibleTimeout(setTimeout(() => {
+                    setScoreVisible(true);
+                }, props.quoteDuration * (Object.keys(props.track.scores).length + 1)));
+            }
         }
     }, [props.track]);
 
@@ -47,11 +48,11 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
                 <div className="flex flex-col justify-end h-full text-xl">
                     <span className="flex">
                         <p className="w-[150px]">{"Date released: "}</p>
-                        <p className="w-[150px] text-center">{new JSDate(props.track.dateReleased).dateString()}</p>
+                        <p className="w-[150px] text-center">{props.track.dateReleased.toString()}</p>
                     </span>
                     <span className="flex">
                         <p className="w-[150px]">{"Date added: "}</p>
-                        <p className="w-[150px] text-center">{new JSDate(props.track.dateAdded).dateString()}</p>
+                        <p className="w-[150px] text-center">{props.track.dateAdded.toString()}</p>
                     </span>
                     <span className="flex mt-5">
                         <p className="w-[150px]">{"Days to add: "}</p>
@@ -64,7 +65,7 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
                     <span className={`flex mt-10 mb-2 text-3xl ease-in-out ${scoreVisible ? "opacity-100" : "invisible opacity-0"}`}
                         style={{ transitionDuration: `${props.fadeDuration}ms` }}>
                         <p className="w-[150px]">{"Score: "}</p>
-                        <p className="w-[150px] text-center">{props.track.total}</p>
+                        <p className="w-[150px] text-center">{props.track.scoreTotal}</p>
                     </span>
                 </div>
             </div>
