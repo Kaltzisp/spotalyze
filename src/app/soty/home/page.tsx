@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
+import type { Playlist } from "@/app/api/shared/Playlist";
 import { useRouter } from "next/navigation";
 
 export interface TextFile {
@@ -36,15 +36,15 @@ export default function Spotalyze(): React.JSX.Element {
 
     async function handleFileSumbission(): Promise<void> {
         setShowDropbox(false);
-        const response = await fetch("/api/playlists/submit-results", {
+        const response = await fetch(`/api/playlists/submit-results?url=${textInput}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(files)
         });
-        const tracks = await response.json() as RankedTrack[];
-        localStorage.setItem("tracks", JSON.stringify(tracks));
+        const playlist = await response.json() as Playlist;
+        localStorage.setItem("Playlist", JSON.stringify(playlist));
         router.push("/soty/slideshow");
     }
 
@@ -71,10 +71,6 @@ export default function Spotalyze(): React.JSX.Element {
                     <button className="nice-button color-invert" type="button" onClick={() => {
                         fetch(`/api/playlists/get-info?url=${textInput}`).catch((error: unknown) => console.error(error));
                     }}>{"Get Info"}
-                    </button>
-                    <button className="nice-button color-invert" type="button" onClick={() => {
-                        fetch(`/api/test?url=${textInput}`).catch((error: unknown) => console.error(error));
-                    }}>{"Test"}
                     </button>
                 </span>
                 {showDropbox ? <div className="rounded-full px-4 flex justify-center items-center drag-drop-area border h-20"
