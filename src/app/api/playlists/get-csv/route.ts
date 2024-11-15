@@ -3,6 +3,7 @@ import { Playlist } from "../Playlist";
 import { writeFileSync } from "fs";
 
 export async function GET(request: NextRequest): Promise<Response> {
+    const filePath = "./data/Tracks.csv";
     const playlistUrl = request.nextUrl.searchParams.get("url");
     const spotifyToken = request.cookies.get("spotify_token");
     if (typeof playlistUrl !== "string") {
@@ -11,10 +12,9 @@ export async function GET(request: NextRequest): Promise<Response> {
     if (typeof spotifyToken === "undefined") {
         return new Response("Authenticataion required.", { status: 401 });
     }
-    const playlist = new Playlist(playlistUrl);
-    await playlist.getTracks(spotifyToken.value);
+    const playlist = await Playlist.fromUrl(playlistUrl, spotifyToken.value);
     let output = "Spotify ID, Artists, Title, Rank, Notes\n";
     output += playlist.tracks.map((track) => `${track.id},"${track.artists}","${track.name}"`).join("\n");
-    writeFileSync("./data/Tracks.csv", output, "utf8");
-    return new Response("Success");
+    writeFileSync(filePath, output, "utf8");
+    return new Response(`Tracks written to ${filePath}.`);
 }
