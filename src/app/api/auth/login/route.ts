@@ -1,6 +1,8 @@
+import { BadResponse } from "../../shared/utils";
+
 export function GET(): Response {
     if (typeof process.env.SPOTIFY_CLIENT_ID === "undefined" || typeof process.env.SPOTIFY_CLIENT_SECRET === "undefined" || typeof process.env.SPOTIFY_REDIRECT_URI === "undefined") {
-        return new Response("Missing Spotify credentials.", { status: 400 });
+        return new BadResponse("Missing Spotify credentials.", 400);
     }
     const queryParams = new URLSearchParams({
         client_id: process.env.SPOTIFY_CLIENT_ID,

@@ -1,9 +1,9 @@
+import { BadResponse, shuffle } from "../../shared/utils";
 import type { NextRequest } from "next/server";
 import { Playlist } from "../../shared/Playlist";
 import type { Scores } from "../../shared/Track";
 import type { TextFile } from "@/app/soty/home/page";
 import { parse } from "papaparse";
-import { shuffle } from "../../shared/utils";
 
 interface TrackResult {
     trackId: string;
@@ -15,10 +15,10 @@ export async function POST(request: NextRequest): Promise<Response> {
     const spotifyToken = request.cookies.get("spotify_token");
 
     if (typeof playlistUrl !== "string") {
-        return new Response("Missing playlist url.", { status: 400 });
+        return new BadResponse("Missing playlist url.", 400);
     }
     if (typeof spotifyToken === "undefined") {
-        return new Response("Authentication required.", { status: 401 });
+        return new BadResponse("Authentication required.", 401);
     }
 
     const files = await request.json() as TextFile[];
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         // Parsing rankings.
         const trackIds = new Set();
         const ranks = new Set();
-        const scores = csvData.map((row) => {
+        const scores = csvData.splice(0, 160).map((row) => {
             const trackId = row[idColumn];
             const trackRank = parseInt(row[rankColumn], 10);
             if (trackIds.has(trackId)) {

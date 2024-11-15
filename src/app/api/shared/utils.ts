@@ -6,3 +6,9 @@ export function shuffle<T>(arr: T[]): T[] {
     }
     return shuffled;
 }
+
+export class BadResponse extends Response {
+    public constructor(message: string, status: number) {
+        super(JSON.stringify({ error: message }), { status });
+    }
+}
