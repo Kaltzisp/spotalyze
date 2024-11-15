@@ -90,11 +90,15 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     // Sorting by highest scores to lowest -> removing outliers -> total score.
     playlist.tracks = shuffle(playlist.tracks);
-    playlist.tracks.sort((a, b) => a.scoreString.localeCompare(b.scoreString));
-    playlist.tracks.sort((a, b) => a.scoreNoOutlier - b.scoreNoOutlier);
-    playlist.tracks.sort((a, b) => a.scoreTotal - b.scoreTotal);
+    playlist.tracks.sort((a, b) => b.scoreString.localeCompare(a.scoreString));
+    playlist.tracks.sort((a, b) => b.scoreNoOutlier - a.scoreNoOutlier);
+    playlist.tracks.sort((a, b) => b.scoreVariance - a.scoreVariance);
+    playlist.tracks.sort((a, b) => b.scoreTotal - a.scoreTotal);
 
     // Creating final ranking playlist.
-    const newPlaylist = await Playlist.fromTracks("2024 SOTY Countdown", playlist.trackURIs, "./data/2024_Image.jpg", spotifyToken.value);
-    return new Response(JSON.stringify(newPlaylist), { status: 200 });
+    const rankedPlaylist = await Playlist.fromTracks("2024 SOTY Countdown", playlist.trackURIs, "./data/2024_Image.jpg", spotifyToken.value);
+    rankedPlaylist.tracks.forEach((track) => {
+        track.scores = results[track.id].scores;
+    });
+    return new Response(JSON.stringify(rankedPlaylist), { status: 200 });
 }

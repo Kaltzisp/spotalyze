@@ -72,6 +72,15 @@ export class Track {
         return Object.values(this.scores).sort((a, b) => a.rank - b.rank).map((score) => score.rank.toString().padStart(3, "0")).join("");
     }
 
+    public get scoreVariance(): number {
+        if (typeof this.scores === "undefined") {
+            throw new Error("Track not scored.");
+        }
+        const ranks = Object.values(this.scores).map((score) => score.rank);
+        const mean = ranks.reduce((acc, rank) => acc + rank, 0) / ranks.length;
+        return ranks.reduce((acc, rank) => acc + (rank - mean) ** 2, 0) / ranks.length;
+    }
+
     public get scoreNoOutlier(): number {
         if (typeof this.scores === "undefined") {
             throw new Error("Track not scored.");
