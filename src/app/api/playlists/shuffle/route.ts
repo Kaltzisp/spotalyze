@@ -9,7 +9,7 @@ export async function GET(request: NextRequest): Promise<Response> {
         return new Response("Missing playlist url.", { status: 400 });
     }
     if (typeof spotifyToken === "undefined") {
-        return new Response("Authenticataion required.", { status: 401 });
+        return new Response("Authentication required.", { status: 401 });
     }
     const playlist = await Playlist.fromUrl(playlistUrl, spotifyToken.value);
     await Playlist.fromTracks("Shuffled Playlist", shuffle(playlist.trackURIs), null, spotifyToken.value);
