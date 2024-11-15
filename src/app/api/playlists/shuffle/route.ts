@@ -11,10 +11,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     if (typeof spotifyToken === "undefined") {
         return new Response("Authenticataion required.", { status: 401 });
     }
-    const playlist = new Playlist(playlistUrl);
-    await playlist.getTracks(spotifyToken.value);
-    const trackURIs = shuffle(playlist.tracks.map((track) => `spotify:track:${track.id}`));
-    const newPlaylistUrl = await Playlist.create(trackURIs, "Shuffled Playlist", "None");
-    console.log(newPlaylistUrl);
+    const playlist = await Playlist.fromUrl(playlistUrl, spotifyToken.value);
+    await Playlist.fromTracks("Shuffled Playlist", shuffle(playlist.trackURIs), null, spotifyToken.value);
     return new Response("Success");
 }
