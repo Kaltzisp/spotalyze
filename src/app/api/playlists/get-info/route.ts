@@ -9,15 +9,17 @@ export async function GET(request: NextRequest): Promise<Response> {
         return new Response("Missing playlist url.", { status: 400 });
     }
     if (typeof spotifyToken === "undefined") {
-        return new Response("Authenticataion required.", { status: 401 });
+        return new Response("Authentication required.", { status: 401 });
     }
-    const playlist = new Playlist(playlistUrl);
-    await playlist.getTracks(spotifyToken.value);
-    playlist.tracks = await Promise.all(playlist.tracks.map(async (track) => track.getEarliestReleaseDate()));
 
-    // Writing to JSON and CSV.
-    writeFileSync("./data/PlaylistInfo.json", JSON.stringify(playlist, null, 4), "utf8");
+    // Getting playlist and track info.
+    const playlist = await Playlist.fromUrl(playlistUrl, spotifyToken.value);
+    await Promise.all(playlist.tracks.map(async (track) => track.updateReleaseDate()));
+
+    // Writing JSON and CSV.
+    const filePath = "./data/PlaylistInfo";
+    writeFileSync(`${filePath}.json`, JSON.stringify(playlist, null, 4), "utf8");
     const output = playlist.tracks.map((track) => track.toCsvRow()).join("\n");
-    writeFileSync("./data/Playlists/PlaylistInfo.csv", output, "utf8");
+    writeFileSync(`${filePath}.csv`, output, "utf8");
     return new Response("Success");
 }
