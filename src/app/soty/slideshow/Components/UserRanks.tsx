@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import type { RankedTrack } from "@/app/api/playlists/submit-results/route";
 import { quotify } from "./Quote";
-import { shuffle } from "@/app/api/utils";
+import { shuffle } from "@/app/api/shared/utils";
 
 interface UserRanksProps {
     readonly fadeDuration: number;

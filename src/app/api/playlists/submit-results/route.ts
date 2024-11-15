@@ -3,7 +3,7 @@ import { Playlist } from "../Playlist";
 import type { Scores } from "../Track";
 import type { TextFile } from "@/app/soty/home/page";
 import { parse } from "papaparse";
-import { shuffle } from "../../utils";
+import { shuffle } from "../../shared/utils";
 
 interface TrackResult {
     trackId: string;

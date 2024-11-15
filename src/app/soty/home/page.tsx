@@ -72,6 +72,10 @@ export default function Spotalyze(): React.JSX.Element {
                         fetch(`/api/playlists/get-info?url=${textInput}`).catch((error: unknown) => console.error(error));
                     }}>{"Get Info"}
                     </button>
+                    <button className="nice-button color-invert" type="button" onClick={() => {
+                        fetch(`/api/test?url=${textInput}`).catch((error: unknown) => console.error(error));
+                    }}>{"Test"}
+                    </button>
                 </span>
                 {showDropbox ? <div className="rounded-full px-4 flex justify-center items-center drag-drop-area border h-20"
                     onDragOver={(event) => event.preventDefault()} onDrop={(event) => handleFileDrop(event)}>

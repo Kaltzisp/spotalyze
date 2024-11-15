@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { Playlist } from "../Playlist";
-import { shuffle } from "../../utils";
+import { shuffle } from "../../shared/utils";
 
 export async function GET(request: NextRequest): Promise<Response> {
     const playlistUrl = request.nextUrl.searchParams.get("url");
