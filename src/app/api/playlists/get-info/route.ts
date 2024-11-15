@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { Playlist } from "../Playlist";
+import { Playlist } from "../../shared/Playlist";
 import { writeFileSync } from "fs";
 
 export async function GET(request: NextRequest): Promise<Response> {
