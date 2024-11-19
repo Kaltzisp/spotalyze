@@ -24,10 +24,10 @@ export default function Slideshow(): React.JSX.Element {
     const [hideTrackInfoTimeout, setHideTrackInfoTimeout] = useState<NodeJS.Timeout>();
     const [trackIncrementTimeout, setTrackIncrementTimeout] = useState<NodeJS.Timeout>();
     const [showTrackInfoTimeout, setShowTrackInfoTimeout] = useState<NodeJS.Timeout>();
-
-    const token = document.cookie.split("; ").find((cookie) => cookie.startsWith("spotify_token="))?.split("=")[1];
+    const [token, setToken] = useState("");
 
     useEffect(() => {
+        setToken(document.cookie.split("; ").find((cookie) => cookie.startsWith("spotify_token="))?.split("=")[1] ?? "");
         const playlistJson = localStorage.getItem("Playlist");
         if (playlistJson === null) {
             router.push("/soty/home");
