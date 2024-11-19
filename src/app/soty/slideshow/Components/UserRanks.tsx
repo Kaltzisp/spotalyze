@@ -52,10 +52,11 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
             }
             setScores(userScores);
         }
+        setScoresVisible(scores.length);
         setScoresTimeout(setTimeout(() => {
             setScoresVisible(1);
             setScoresAreVisible(true);
-        }, props.quoteDuration * 2));
+        }, props.quoteDuration + scoreDelay));
     }, [props.track]);
 
     useEffect(() => {
