@@ -6,6 +6,7 @@ import { shuffle } from "@/app/api/shared/utils";
 interface UserRanksProps {
     readonly fadeDuration: number;
     readonly quoteDuration: number;
+    readonly scoreDelay: number;
     readonly track: Track;
     readonly visible: boolean;
 }
@@ -21,7 +22,6 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
     const [scoresVisible, setScoresVisible] = React.useState(0);
     const [scoresAreVisible, setScoresAreVisible] = React.useState(false);
     const [scoresTimeout, setScoresTimeout] = React.useState<NodeJS.Timeout>();
-    const scoreDelay = 5000;
 
     function getSuffix(number: number): string {
         const suffixes = ["th", "st", "nd", "rd"];
@@ -56,12 +56,12 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
         setScoresTimeout(setTimeout(() => {
             setScoresVisible(1);
             setScoresAreVisible(true);
-        }, props.quoteDuration + scoreDelay));
+        }, props.quoteDuration + props.scoreDelay));
     }, [props.track]);
 
     useEffect(() => {
         if (scoresVisible < scores.length) {
-            setScoresTimeout(setTimeout(() => setScoresVisible((previous) => previous + 1), scoreDelay));
+            setScoresTimeout(setTimeout(() => setScoresVisible((previous) => previous + 1), props.scoreDelay));
         }
     }, [scoresVisible]);
 

@@ -11,6 +11,15 @@ import { useRouter } from "next/navigation";
 const quoteDuration = 10000;
 const fadeDuration = 1000;
 const trackLeadIn = 3000;
+const scoreDelay = 5000;
+const trackDelay = 3000;
+
+/*
+ * Add #160 or whatever before the quote.
+ * Add animations to spinning, #160ths, and #1.
+ * Gargi says to change da colors.
+ * And add a wrapped.
+ */
 
 export default function Slideshow(): React.JSX.Element {
     const router = useRouter();
@@ -69,7 +78,7 @@ export default function Slideshow(): React.JSX.Element {
         if (typeof track?.scores !== "undefined") {
             setQuotes(Object.values(track.scores).map((result) => result.note).filter((note) => note !== ""));
             setHideTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(false), track.duration - trackLeadIn));
-            setTrackIncrementTimeout(setTimeout(() => setTrackIndex((previousIndex) => previousIndex + 1), track.duration));
+            setTrackIncrementTimeout(setTimeout(() => setTrackIndex((previousIndex) => previousIndex + 1), track.duration + trackDelay));
             if (typeof token === "string") {
                 track.play(token);
             }
@@ -87,8 +96,8 @@ export default function Slideshow(): React.JSX.Element {
             <Quote fadeDuration={fadeDuration} quoteDuration={quoteDuration} quotes={quotes} />
             <div className="flex flex-col gap-[5rem] justify-center items-center">
                 <PlayedTracks fadeDuration={fadeDuration} trackIndex={trackIndex} tracks={tracks} visible={trackInfoVisible} />
-                {track ? <TrackInfo fadeDuration={fadeDuration} quoteDuration={quoteDuration} track={track} trackIndex={trackIndex} visible={trackInfoVisible} /> : null}
-                {track ? <UserRanks fadeDuration={fadeDuration} quoteDuration={quoteDuration} track={track} visible={trackInfoVisible} /> : null}
+                {track ? <TrackInfo fadeDuration={fadeDuration} quoteDuration={quoteDuration} scoreDelay={scoreDelay} track={track} trackIndex={trackIndex} visible={trackInfoVisible} /> : null}
+                {track ? <UserRanks fadeDuration={fadeDuration} quoteDuration={quoteDuration} scoreDelay={scoreDelay} track={track} visible={trackInfoVisible} /> : null}
             </div>
         </main >
     );

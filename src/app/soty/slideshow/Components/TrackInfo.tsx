@@ -5,6 +5,7 @@ import type { Track } from "@/app/api/shared/Track";
 interface TrackInfoProps {
     readonly fadeDuration: number;
     readonly quoteDuration: number;
+    readonly scoreDelay: number;
     readonly track: Track;
     readonly trackIndex: number;
     readonly visible: boolean;
@@ -31,7 +32,7 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
             if (typeof props.track.scores !== "undefined") {
                 setScoreVisibleTimeout(setTimeout(() => {
                     setScoreVisible(true);
-                }, props.quoteDuration + 5000 * Object.keys(props.track.scores).length));
+                }, props.quoteDuration + props.scoreDelay * Object.keys(props.track.scores).length));
             }
         }
     }, [props.track]);
