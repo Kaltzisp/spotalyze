@@ -33,17 +33,6 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
         return suffixes[lastDigit] || "th";
     }
 
-    function animateScore(score: number, trackName: string): string {
-        if (trackName === "Spinning") {
-            return "animate-[spin_3s_linear_infinite]";
-        } else if (score > 155) {
-            return "animate-[pulse_1.7s_linear_infinite]";
-        } else if (score <= 10) {
-            return "animate-[ping_1.3s_linear_infinite]";
-        }
-        return "";
-    }
-
     useEffect(() => {
         setScoresAreVisible(false);
         clearTimeout(scoresTimeout);
@@ -80,7 +69,7 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
             {scores.map((score) => (
                 <div className={`flex flex-col flex-1 text-center gap-2 w-[24rem] font-serif ease-in-out ${scores.length - score.place <= scoresVisible - 1 && props.visible && scoresAreVisible ? "opacity-100" : "invisible opacity-0"}`}
                     key={score.user} style={{ transitionDuration: `${props.fadeDuration}ms` }}>
-                    <span className={`font-serif ${animateScore(score.rank, props.track.name)}`}>
+                    <span className="font-serif">
                         <span className="text-5xl">
                             {score.rank}
                         </span>
