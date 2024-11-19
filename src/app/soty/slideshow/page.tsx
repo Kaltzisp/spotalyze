@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { type StoredTrack, Track } from "@/app/api/shared/Track";
 import PlayedTracks from "./Components/PlayedTracks";
 import type { Playlist } from "@/app/api/shared/Playlist";
 import Quote from "./Components/Quote";
-import type { Track } from "@/app/api/shared/Track";
 import TrackInfo from "./Components/TrackInfo";
 import UserRanks from "./Components/UserRanks";
 import { useRouter } from "next/navigation";
@@ -31,6 +31,7 @@ export default function Slideshow(): React.JSX.Element {
             router.push("/soty/home");
         } else {
             const playlist = JSON.parse(playlistJson) as Playlist;
+            playlist.tracks = (playlist.tracks as unknown as StoredTrack[]).map((storedTrack: StoredTrack) => new Track(storedTrack));
             setTracks(playlist.tracks);
             setTrackIndex(0);
         }

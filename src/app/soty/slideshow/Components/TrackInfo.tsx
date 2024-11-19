@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { JSDate } from "@/app/api/shared/JSDate";
 import type { Track } from "@/app/api/shared/Track";
 
 interface TrackInfoProps {
@@ -24,13 +25,14 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
     }
 
     useEffect(() => {
+        console.log(props.track);
         clearTimeout(scoreVisibleTimeout);
         if (typeof props.track !== "undefined") {
             setScoreVisible(false);
             if (typeof props.track.scores !== "undefined") {
                 setScoreVisibleTimeout(setTimeout(() => {
                     setScoreVisible(true);
-                }, props.quoteDuration * (Object.keys(props.track.scores).length + 1)));
+                }, props.quoteDuration + 5000 * Object.keys(props.track.scores).length));
             }
         }
     }, [props.track]);
@@ -48,15 +50,15 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
                 <div className="flex flex-col justify-end h-full text-xl">
                     <span className="flex">
                         <p className="w-[150px]">{"Date released: "}</p>
-                        <p className="w-[150px] text-center">{props.track.dateReleased.toString()}</p>
+                        <p className="w-[150px] text-center">{new JSDate(props.track.dateReleased).toString()}</p>
                     </span>
                     <span className="flex">
                         <p className="w-[150px]">{"Date added: "}</p>
-                        <p className="w-[150px] text-center">{props.track.dateAdded.toString()}</p>
+                        <p className="w-[150px] text-center">{new JSDate(props.track.dateAdded).toString()}</p>
                     </span>
                     <span className="flex mt-5">
                         <p className="w-[150px]">{"Days to add: "}</p>
-                        <p className="w-[150px] text-center">{Math.max(Math.floor((new Date(props.track.dateAdded).getTime() - new Date(props.track.dateReleased).getTime()) / (1000 * 60 * 60 * 24)), 0)}</p>
+                        <p className="w-[150px] text-center">{Math.max(Math.floor((new JSDate(props.track.dateAdded).getTime() - new JSDate(props.track.dateReleased).getTime()) / (1000 * 60 * 60 * 24)), 0)}</p>
                     </span>
                     <span className="flex">
                         <p className="w-[150px]">{"Added by: "}</p>

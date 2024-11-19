@@ -3,9 +3,9 @@ import { getReleaseDateFromGenius } from "../playlists/get-info/genius";
 import { getReleaseDateFromIsrc } from "../playlists/get-info/musicbrainz";
 
 export interface SpotifyPlaylistItem {
-    added_at: "string";
+    added_at: string;
     added_by: {
-        id: "string";
+        id: string;
     };
     track: {
         id: string;
@@ -34,28 +34,54 @@ export interface Scores {
     };
 }
 
+export interface StoredTrack {
+    id: string;
+    name: string;
+    artists: string;
+    duration: number;
+    albumImageUrl: string;
+    dateAdded: string;
+    addedBy: string;
+    isrc: string;
+    dateReleased: string;
+    scores: Scores;
+}
+
 export class Track {
-    public readonly id: string;
-    public readonly name: string;
-    public readonly artists: string;
-    public readonly duration: number;
-    public readonly albumImageUrl: string;
-    public readonly dateAdded: JSDate;
     public readonly addedBy: string;
-    public readonly isrc: string;
+    public readonly albumImageUrl: string;
+    public readonly artists: string;
+    public readonly dateAdded: JSDate;
     public dateReleased: JSDate;
+    public readonly duration: number;
+    public readonly id: string;
+    public readonly isrc: string;
+    public readonly name: string;
     public scores?: Scores;
 
-    public constructor(item: SpotifyPlaylistItem) {
-        this.id = item.track.id;
-        this.name = item.track.name;
-        this.artists = item.track.artists.map((artist) => artist.name).join("; ");
-        this.duration = item.track.duration_ms;
-        this.albumImageUrl = item.track.album.images[0].url;
-        this.dateAdded = new JSDate(item.added_at);
-        this.addedBy = item.added_by.id;
-        this.isrc = item.track.external_ids.isrc;
-        this.dateReleased = new JSDate(item.track.album.release_date);
+    public constructor(item: SpotifyPlaylistItem | StoredTrack) {
+        if (Track.isSpotifyPlaylistItem(item)) {
+            this.addedBy = item.added_by.id;
+            this.albumImageUrl = item.track.album.images[0].url;
+            this.artists = item.track.artists.map((artist) => artist.name).join("; ");
+            this.dateAdded = new JSDate(item.added_at);
+            this.dateReleased = new JSDate(item.track.album.release_date);
+            this.duration = item.track.duration_ms;
+            this.id = item.track.id;
+            this.isrc = item.track.external_ids.isrc;
+            this.name = item.track.name;
+        } else {
+            this.addedBy = item.addedBy;
+            this.albumImageUrl = item.albumImageUrl;
+            this.artists = item.artists;
+            this.dateAdded = new JSDate(item.dateAdded);
+            this.dateReleased = new JSDate(item.dateReleased);
+            this.duration = item.duration;
+            this.id = item.id;
+            this.isrc = item.isrc;
+            this.name = item.name;
+            this.scores = item.scores;
+        }
     }
 
     public get scoreTotal(): number {
@@ -93,6 +119,13 @@ export class Track {
         })).sort((a, b) => a.variance - b.variance);
         scores.pop();
         return scores.reduce((acc, score) => acc + score.rank, 0);
+    }
+
+    private static isSpotifyPlaylistItem(item: SpotifyPlaylistItem | StoredTrack): item is SpotifyPlaylistItem {
+        if ("track" in item) {
+            return true;
+        }
+        return false;
     }
 
     public async updateReleaseDate(): Promise<Track> {
