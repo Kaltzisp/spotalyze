@@ -25,6 +25,8 @@ export default function Slideshow(): React.JSX.Element {
     const [trackIncrementTimeout, setTrackIncrementTimeout] = useState<NodeJS.Timeout>();
     const [showTrackInfoTimeout, setShowTrackInfoTimeout] = useState<NodeJS.Timeout>();
 
+    const token = document.cookie.split("; ").find((cookie) => cookie.startsWith("spotify_token="))?.split("=")[1];
+
     useEffect(() => {
         const playlistJson = localStorage.getItem("Playlist");
         if (playlistJson === null) {
@@ -68,6 +70,9 @@ export default function Slideshow(): React.JSX.Element {
             setQuotes(Object.values(track.scores).map((result) => result.note).filter((note) => note !== ""));
             setHideTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(false), track.duration - trackLeadIn));
             setTrackIncrementTimeout(setTimeout(() => setTrackIndex((previousIndex) => previousIndex + 1), track.duration));
+            if (typeof token === "string") {
+                track.play(token);
+            }
         }
     }, [track]);
 

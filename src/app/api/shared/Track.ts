@@ -145,4 +145,18 @@ export class Track {
     public toCsvRow(): string {
         return `${this.id},"${this.artists}","${this.name}",${this.dateReleased.toExcelDate()},${this.dateAdded.toExcelDate()},${this.addedBy}`;
     }
+
+    public play(token: string): void {
+        fetch("https://api.spotify.com/v1/me/player/play", {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                uris: [`spotify:track:${this.id}`],
+                position_ms: 0
+            })
+        }).catch((error: unknown) => console.error(error));
+    }
 }

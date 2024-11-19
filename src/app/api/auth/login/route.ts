@@ -8,7 +8,7 @@ export function GET(): Response {
         client_id: process.env.SPOTIFY_CLIENT_ID,
         redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
         response_type: "code",
-        scope: "playlist-modify-public ugc-image-upload"
+        scope: "playlist-modify-public ugc-image-upload user-modify-playback-state"
     });
     return Response.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 }
