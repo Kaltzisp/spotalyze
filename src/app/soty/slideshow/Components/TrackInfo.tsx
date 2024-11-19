@@ -25,7 +25,6 @@ export default function TrackInfo(props: TrackInfoProps): React.JSX.Element {
     }
 
     useEffect(() => {
-        console.log(props.track);
         clearTimeout(scoreVisibleTimeout);
         if (typeof props.track !== "undefined") {
             setScoreVisible(false);
