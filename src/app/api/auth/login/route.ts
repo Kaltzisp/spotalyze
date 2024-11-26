@@ -4,9 +4,11 @@ import type { NextRequest } from "next/server";
 export function GET(request: NextRequest): Response {
     const clientToken = request.cookies.get("client_token");
     const clientSecret = request.cookies.get("client_secret");
-    if (typeof clientToken === "string" && typeof clientSecret === "string") {
+    const redirectUri = request.cookies.get("redirect_uri");
+    if (typeof clientToken === "string" && typeof clientSecret === "string" && typeof redirectUri === "string") {
         process.env.SPOTIFY_CLIENT_ID = clientToken;
         process.env.SPOTIFY_CLIENT_SECRET = clientSecret;
+        process.env.SPOTIFY_REDIRECT_URI = redirectUri;
         console.log(process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET);
     }
     if (typeof process.env.SPOTIFY_CLIENT_ID === "undefined" || typeof process.env.SPOTIFY_CLIENT_SECRET === "undefined" || typeof process.env.SPOTIFY_REDIRECT_URI === "undefined") {
