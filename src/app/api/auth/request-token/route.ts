@@ -11,7 +11,7 @@ export async function GET(request: NextRequest): Promise<Response> {
         body: `code=${authCode}&redirect_uri=${process.env.SPOTIFY_REDIRECT_URI}&grant_type=authorization_code`
     });
     const data = await apiResponse.json() as { access_token: string };
-    const response = NextResponse.redirect(`${request.nextUrl.origin}/soty/home`);
+    const response = NextResponse.redirect(`${request.headers.get("x-forwarded-proto") ?? "http"}${request.headers.get("host")}/soty/home`);
     response.cookies.set("spotify_token", data.access_token, {
         path: "/",
         sameSite: "strict"
