@@ -1,4 +1,4 @@
-import { BadResponse } from "../../shared/utils";
+import { BadResponse } from "../../../lib/utils";
 
 export function GET(): Response {
     if (typeof process.env.SPOTIFY_CLIENT_ID === "undefined" || typeof process.env.SPOTIFY_CLIENT_SECRET === "undefined" || typeof process.env.SPOTIFY_REDIRECT_URI === "undefined") {

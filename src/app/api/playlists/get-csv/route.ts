@@ -1,6 +1,6 @@
-import { BadResponse } from "../../shared/utils";
+import { BadResponse } from "../../../lib/utils";
 import type { NextRequest } from "next/server";
-import { Playlist } from "../../shared/Playlist";
+import { Playlist } from "../../../lib/Playlist";
 import { writeFileSync } from "fs";
 
 export async function GET(request: NextRequest): Promise<Response> {

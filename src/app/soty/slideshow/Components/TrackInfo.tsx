@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { JSDate } from "@/app/api/shared/JSDate";
-import type { Track } from "@/app/api/shared/Track";
+import { JSDate } from "@/app/lib/JSDate";
+import type { Track } from "@/app/lib/Track";
 
 interface TrackInfoProps {
     readonly fadeDuration: number;

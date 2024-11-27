@@ -20,6 +20,10 @@ export class Playlist {
         return this.tracks.map((track) => `spotify:track:${track.id}`);
     }
 
+    public get url(): string {
+        return `https://open.spotify.com/playlist/${this.id}`;
+    }
+
     public static async fromUrl(url: string, token: string): Promise<Playlist> {
         const playlistId = url.split("/").at(-1)?.split("?")[0];
         if (typeof playlistId === "undefined") {
@@ -30,9 +34,7 @@ export class Playlist {
     }
 
     public static async fromTracks(playlistName: string, trackURIs: string[], playlistImage: string | null, token: string): Promise<Playlist> {
-        const userResponse = await fetch("/api/auth/check-user");
-        const username = await userResponse.text();
-        const response = await fetch(`https://api.spotify.com/v1/users/${username}/playlists`, {
+        const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,

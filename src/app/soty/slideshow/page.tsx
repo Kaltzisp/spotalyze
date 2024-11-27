@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { type StoredTrack, Track } from "@/app/api/shared/Track";
+import { type StoredTrack, Track } from "@/app/lib/Track";
 import PlayedTracks from "./Components/PlayedTracks";
-import type { Playlist } from "@/app/api/shared/Playlist";
+import type { Playlist } from "@/app/lib/Playlist";
 import Quote from "./Components/Quote";
 import TrackInfo from "./Components/TrackInfo";
 import UserRanks from "./Components/UserRanks";

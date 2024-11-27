@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import type { Track } from "@/app/api/shared/Track";
+import type { Track } from "@/app/lib/Track";
 import { quotify } from "./Quote";
-import { shuffle } from "@/app/api/shared/utils";
+import { shuffle } from "@/app/lib/utils";
 
 interface UserRanksProps {
     readonly fadeDuration: number;

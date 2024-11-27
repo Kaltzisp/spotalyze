@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import type { Playlist } from "@/app/api/shared/Playlist";
+import type { Playlist } from "@/app/lib/Playlist";
 import { useRouter } from "next/navigation";
 
 export interface TextFile {
@@ -65,11 +65,23 @@ export default function Spotalyze(): React.JSX.Element {
                     }}>{"To CSV"}
                     </button>
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
-                        fetch("/api/process").catch((error: unknown) => console.error(error));
-                    }}>{"PROCESS"}
+                        fetch("/api/playlists/create", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                trackURIs: textInput.split(",").map((uri) => uri.trim()),
+                                shuffle: false
+                            })
+                        }).catch((error: unknown) => console.error(error));
+                    }}>{"To Playlist"}
                     </button>
                     <button className="nice-button color-invert mr-5" type="button" onClick={() => {
-                        fetch(`/api/playlists/shuffle?url=${textInput}`).catch((error: unknown) => console.error(error));
+                        fetch("/api/playlists/create", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                sourcePlaylistUrl: textInput,
+                                shuffle: true
+                            })
+                        }).catch((error: unknown) => console.error(error));
                     }}>{"Shuffle"}
                     </button>
                     <button className="nice-button color-invert" type="button" onClick={() => {

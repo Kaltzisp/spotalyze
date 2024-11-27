@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { Track } from "@/app/api/shared/Track";
+import type { Track } from "@/app/lib/Track";
 
 interface PlayedTracksProps {
     readonly fadeDuration: number;

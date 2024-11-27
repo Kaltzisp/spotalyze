@@ -1,4 +1,4 @@
-import { JSDate } from "../../shared/JSDate";
+import { JSDate } from "../../../lib/JSDate";
 
 interface RecordingInfo {
     recordings: {

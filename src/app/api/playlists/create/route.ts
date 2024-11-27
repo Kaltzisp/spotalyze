@@ -1,6 +1,6 @@
-import { BadResponse, shuffle } from "../../shared/utils";
+import { BadResponse, shuffle } from "../../../lib/utils";
 import type { NextRequest } from "next/server";
-import { Playlist } from "../../shared/Playlist";
+import { Playlist } from "../../../lib/Playlist";
 
 interface CreatePlaylistBody {
     sourcePlaylistUrl?: string;
