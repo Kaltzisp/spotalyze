@@ -11,6 +11,6 @@ export async function GET(request: NextRequest): Promise<Response> {
     } else if (typeof spotifyToken === "undefined") {
         return new BadResponse("Authentication required.", 401);
     }
-    await Playlist.fromTracks("Spotalyze Playlist", trackURIs, null, spotifyToken);
-    return new Response("Playlist created.");
+    const playlist = await Playlist.fromTracks("Spotalyze Playlist", trackURIs, null, spotifyToken);
+    return new Response(`Playlist created at ${playlist.url}`, { status: 201 });
 }
