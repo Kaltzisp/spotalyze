@@ -1,7 +1,7 @@
-import { BadResponse, shuffle } from "../../shared/utils";
+import { BadResponse, shuffle } from "../shared/utils";
 import type { NextRequest } from "next/server";
-import { Playlist } from "../../shared/Playlist";
-import type { Scores } from "../../shared/Track";
+import { Playlist } from "../shared/Playlist";
+import type { Scores } from "../shared/Track";
 import type { TextFile } from "@/app/soty/home/page";
 import { parse } from "papaparse";
 
