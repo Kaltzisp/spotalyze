@@ -30,7 +30,9 @@ export class Playlist {
     }
 
     public static async fromTracks(playlistName: string, trackURIs: string[], playlistImage: string | null, token: string): Promise<Playlist> {
-        const response = await fetch("https://api.spotify.com/v1/users/omgodmez/playlists", {
+        const userResponse = await fetch("/api/auth/check-user");
+        const username = await userResponse.text();
+        const response = await fetch(`https://api.spotify.com/v1/users/${username}/playlists`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
