@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { BadResponse } from "../../shared/utils";
 
 export function GET(): Response {
     if (typeof process.env.SPOTIFY_CLIENT_ID === "undefined" || typeof process.env.SPOTIFY_CLIENT_SECRET === "undefined" || typeof process.env.SPOTIFY_REDIRECT_URI === "undefined") {
-        return NextResponse.json({ error: "Missing environment variables" }, { status: 500 });
+        return new BadResponse("Missing environment variables", 500);
     }
     const queryParams = new URLSearchParams({
         client_id: process.env.SPOTIFY_CLIENT_ID,
