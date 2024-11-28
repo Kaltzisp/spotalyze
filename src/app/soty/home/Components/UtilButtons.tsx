@@ -21,7 +21,7 @@ export default function UtilButtons(props: UtilButtonsProps): React.JSX.Element 
                         shuffle: false
                     })
                 }).catch((error: unknown) => console.error(error));
-            }}>{"To Playlist"}
+            }}>{"From Tracks"}
             </button>
 
             <button className="nice-button color-invert mr-5" type="button" onClick={() => {
