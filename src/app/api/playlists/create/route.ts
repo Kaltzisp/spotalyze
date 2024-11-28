@@ -17,6 +17,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     if (typeof body.sourcePlaylistUrl === "string") {
         const playlist = await Playlist.fromUrl(body.sourcePlaylistUrl, spotifyToken);
         body.trackURIs = playlist.trackURIs;
+    } else {
+        body.trackURIs = body.trackURIs?.map((uri) => `spotify:track:${uri}`);
     }
     if (typeof body.trackURIs !== "undefined") {
         const uris = body.shuffle ? shuffle(body.trackURIs) : body.trackURIs;
