@@ -1,6 +1,6 @@
 import { JSDate } from "./JSDate";
-import { getReleaseDateFromGenius } from "../playlists/get-info/genius";
-import { getReleaseDateFromIsrc } from "../playlists/get-info/musicbrainz";
+import { getReleaseDateFromGenius } from "../api/playlists/get-info/genius";
+import { getReleaseDateFromIsrc } from "../api/playlists/get-info/musicbrainz";
 
 export interface SpotifyPlaylistItem {
     added_at: string;
