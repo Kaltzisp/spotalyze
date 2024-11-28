@@ -2,7 +2,7 @@ import { BadResponse, shuffle } from "../../lib/utils";
 import type { NextRequest } from "next/server";
 import { Playlist } from "../../lib/Playlist";
 import type { Scores } from "../../lib/Track";
-import type { TextFile } from "@/app/soty/home/page";
+import type { TextFile } from "@/app/soty/home/Components/Dropzone";
 import { parse } from "papaparse";
 
 interface TrackResult {
