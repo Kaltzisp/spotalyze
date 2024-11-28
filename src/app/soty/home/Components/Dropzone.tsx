@@ -32,7 +32,7 @@ export default function Dropzone(props: DropzoneProps): React.JSX.Element {
 
     async function handleFileSumbission(): Promise<void> {
         setShowDropbox(false);
-        const response = await fetch(`/api/playlists/submit-results?url=${props.textInput}`, {
+        const response = await fetch(`/api/submit-results?url=${props.textInput}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
