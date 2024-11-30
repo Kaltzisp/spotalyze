@@ -14,13 +14,6 @@ const trackLeadIn = 3000;
 const scoreDelay = 5000;
 const trackDelay = 3000;
 
-/*
- * Add #160 or whatever before the quote.
- * Add animations to spinning, #160ths, and #1.
- * Gargi says to change da colors.
- * And add a wrapped.
- */
-
 export default function Slideshow(): React.JSX.Element {
     const router = useRouter();
 
@@ -44,15 +37,17 @@ export default function Slideshow(): React.JSX.Element {
             const playlist = JSON.parse(playlistJson) as Playlist;
             playlist.tracks = (playlist.tracks as unknown as StoredTrack[]).map((storedTrack: StoredTrack) => new Track(storedTrack));
             setTracks(playlist.tracks);
-            setTrackIndex(0);
+            setTrackIndex(50);
         }
         document.addEventListener("keydown", (event) => {
             switch (event.key) {
                 case "ArrowRight":
-                    setTrackIndex((previousIndex) => previousIndex + 1);
+                    setTrackInfoVisible(false);
+                    setTimeout(() => setTrackIndex((previousIndex) => previousIndex + 1), 1000);
                     break;
                 case "ArrowLeft":
-                    setTrackIndex((previousIndex) => previousIndex - 1);
+                    setTrackInfoVisible(false);
+                    setTimeout(() => setTrackIndex((previousIndex) => previousIndex - 1), 1000);
                     break;
                 default:
                     break;
@@ -69,7 +64,7 @@ export default function Slideshow(): React.JSX.Element {
             if (trackIndex < tracks.length) {
                 setTrack(tracks[trackIndex]);
             } else {
-                router.push("/soty/view");
+                // router.push("/soty/view");
             }
         }
     }, [trackIndex, tracks]);
@@ -86,14 +81,12 @@ export default function Slideshow(): React.JSX.Element {
     }, [track]);
 
     useEffect(() => {
-        if (quotes.length > 0) {
-            setShowTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(true), quoteDuration + fadeDuration / 2));
-        }
+        setShowTrackInfoTimeout(setTimeout(() => setTrackInfoVisible(true), quoteDuration + fadeDuration / 2));
     }, [quotes]);
 
     return (
         <main className="flex justify-center items-center">
-            <Quote fadeDuration={fadeDuration} quoteDuration={quoteDuration} quotes={quotes} />
+            <Quote fadeDuration={fadeDuration} quoteDuration={quoteDuration} quotes={quotes} trackIndex={trackIndex} />
             <div className="flex flex-col gap-[5rem] justify-center items-center">
                 <PlayedTracks fadeDuration={fadeDuration} trackIndex={trackIndex} tracks={tracks} visible={trackInfoVisible} />
                 {track ? <TrackInfo fadeDuration={fadeDuration} quoteDuration={quoteDuration} scoreDelay={scoreDelay} track={track} trackIndex={trackIndex} visible={trackInfoVisible} /> : null}
