@@ -4,6 +4,7 @@ interface QuoteProps {
     readonly quotes: string[];
     readonly quoteDuration: number;
     readonly fadeDuration: number;
+    readonly trackIndex: number;
 }
 
 export function quotify(note: string): string {
@@ -38,13 +39,18 @@ export default function Quote(props: QuoteProps): React.JSX.Element {
         if (props.quotes.length > 0) {
             const quoteList = [...props.quotes];
             cycleQuote(randomPick(quoteList));
+        } else {
+            const quoteList = ["One of the Songs of 2024."];
+            cycleQuote(randomPick(quoteList));
         }
     }, [props.quotes]);
 
     return (
-        <span className={`fixed pl-20 pr-20 text-5xl font-serif text-justify ease-in-out duration-${props.fadeDuration} ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}
+        <div className={`fixed pl-20 pr-20 text-5xl font-serif text-justify ease-in-out duration-${props.fadeDuration} ${quoteVisible ? "opacity-100" : "invisible opacity-0"}`}
             style={{ transitionDuration: `${props.fadeDuration}ms` }}>
-            {typeof quote === "undefined" ? null : quotify(quote)}
-        </span>
+            <span className="flex justify-center">{`#${160 - props.trackIndex}`}</span>
+            <br />
+            <span>{typeof quote === "undefined" ? null : quotify(quote)}</span>
+        </div>
     );
 }
