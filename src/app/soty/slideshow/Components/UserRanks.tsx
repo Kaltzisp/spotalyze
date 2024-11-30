@@ -70,7 +70,7 @@ export default function UserRanks(props: UserRanksProps): React.JSX.Element {
             {scores.map((score) => (
                 <div className={`flex flex-col flex-1 text-center gap-2 w-[24rem] font-serif ease-in-out ${scores.length - score.place <= scoresVisible - 1 && props.visible && scoresAreVisible ? "opacity-100" : "invisible opacity-0"}`}
                     key={score.user} style={{ transitionDuration: `${props.fadeDuration}ms` }}>
-                    <span className="font-serif">
+                    <span className={`font-serif ${props.track.name === "Spinning" ? "animate-spin" : ""}`}>
                         <span className="text-5xl">
                             {score.rank}
                         </span>
