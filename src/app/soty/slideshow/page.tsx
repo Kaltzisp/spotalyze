@@ -37,7 +37,7 @@ export default function Slideshow(): React.JSX.Element {
             const playlist = JSON.parse(playlistJson) as Playlist;
             playlist.tracks = (playlist.tracks as unknown as StoredTrack[]).map((storedTrack: StoredTrack) => new Track(storedTrack));
             setTracks(playlist.tracks);
-            setTrackIndex(50);
+            setTrackIndex(160 - 0);
         }
         document.addEventListener("keydown", (event) => {
             switch (event.key) {
