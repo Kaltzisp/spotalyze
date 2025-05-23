@@ -48,7 +48,7 @@ export interface StoredTrack {
 }
 
 export class Track {
-    public readonly addedBy: string;
+    public addedBy: string;
     public readonly albumImageUrl: string;
     public readonly artists: string;
     public readonly dateAdded: JSDate;
