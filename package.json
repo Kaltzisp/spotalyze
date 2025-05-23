@@ -1,6 +1,6 @@
 {
     "name": "spotalyze",
-    "description": "Spotify music analyser and Song of the Year companion tool built in TS.
+    "description": "Spotify music analyser and Song of the Year companion tool built in TS.",
     "version": "0.1.0",
     "private": true,
     "scripts": {
